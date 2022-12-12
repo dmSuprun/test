@@ -1,0 +1,77 @@
+{% extends "course/course-layout.html" %}
+{%load static%}
+
+{%block styles%}<link rel="stylesheet" href="{%static 'course/css/results.css'%}">{%endblock%}
+
+{%block content%}
+    <div class="container-xxl flex_logo">
+        <h1><span class="badge bg-primary  mt-3">{{title}}</span></h1>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mt-5">
+        <div class="container-xxl">
+            <a class="navbar-brand" href="#">Параметри результатів</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Результати
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-primary" aria-labelledby="navbarDarkDropdownMenuLink">
+                            {% for name, username in users %}
+                                <li><a class="dropdown-item" href="{% url 'read_detail_result' test.slug course.course_slug username%}">{{name}}</a></li>
+                            {% endfor %}
+
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'read_result' test.slug course.course_slug %}">Всі результати</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% for task,task_num in tasks %}
+        <h3>Завдання <span class="badge m-3 bg-primary">{{task_num}}</span></h3>
+        {% for answer,section in answers %}
+            {%if section == task %}
+                <p class="text-muted"><img height="20" src="https://cdn.pixabay.com/photo/2016/03/19/04/40/cap-1266204_1280.png" alt=""> {{answer.user.first_name}} {{answer.user.last_name}}</p> <textarea cols="20" rows="10" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " disabled >{{answer.answer}}</textarea>
+                <table class="table table-striped">
+
+                             <tr>
+                              <th scope="col">Вхідні дані</th>
+                              <th scope="col">Тип вхідних даних</th>
+                              <th scope="col">Вихідні дані</th>
+                              <th scope="col">Тип вихідних даних</th>
+                              <th scope="col">Результат перевірки</th>
+                            </tr>
+                    {% for result_obj,answer_obj in testcases_with_result %}
+                        {%if answer == answer_obj %}
+                                <tr >
+                                    <td>{{result_obj.data_on_which_they_checked.input_test_data}}</td>
+                                    <td>{{result_obj.data_on_which_they_checked.input_test_data_type}}</td>
+                                    <td>{{result_obj.data_on_which_they_checked.output_test_data}}</td>
+                                    <td>{{result_obj.data_on_which_they_checked.output_test_data_type}}</td>
+                                    {% if result_obj.testing_result == True %}
+                                        <td>&#9989;</td>
+                                    {%else%}
+                                        <td>&#10060;</td>
+                                    {%endif%}
+                                </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            {%endif%}
+        {%endfor%}
+    {%endfor%}
+
+
+
+
+
+
+{%endblock%}
+{%block scripts%}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>{%endblock%}
+

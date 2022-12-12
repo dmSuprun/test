@@ -1,0 +1,89 @@
+{% extends "tests/test_layout.html" %}
+{%load static%}
+{%block styles%}
+    <link rel="stylesheet" href="{% static 'tests/css/start_test.css' %}">
+{%endblock%}
+
+
+{%block content%}
+        {% for page in this_page %}
+            <div class="card test_section" style="width: 100%;">
+                <div class="card-header card-title task-position">
+                    {{page.question}}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="form_errors" >{{form.answer.errors}}</div>
+                                <p>{{form.answer}}</p>
+
+                                <div class="container_btn">
+                                    <button type="submit" class="btn btn-primary sand">Відправити</button>
+
+                                    {% if end_test %}
+                                        <a class="btn btn-danger end__test" href="/check/{{course}}/{{test}}/complete" >Завершити</a>
+                                    {% endif %}
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+    {% endfor %}
+
+    {% if  this_page.has_other_pages %}
+                <nav>
+                    <ul class="pagination pagination-lg">
+                        {% if  this_page.has_previous %}
+                        <li class="page-item pagination">
+                            <a class="page-link" href="?page={{this_page.previous_page_number}}" aria-label="Next">
+                                <span aria-hidden="true">&laquo; Попереднє</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {%for page in this_page.paginator.page_range%}
+                            {% if page == this_page.number %}
+                                <li class="page-item pagination "><a class="page-link active " href="?page={{page}}">{{page}}</a></li>
+
+                            {% elif page >= this_page.number|add:-2 and page <=  this_page.number|add:2%}
+                                 {% if page in completed_pages %}
+                                    <li class="page-item pagination "><a class="page-link sanded" href="?page={{page}}">{{page}}</a></li>
+                                {%else%}
+                                    <li class="page-item pagination "><a class="page-link " href="?page={{page}}">{{page}}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if  this_page.has_next %}
+                        <li class="page-item pagination">
+                            <a class="page-link" href="?page={{this_page.next_page_number}}" aria-label="Next">
+                                <span aria-hidden="true">Наступне &raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+    {%else%}
+        {% if task_len == 0 %}
+                <div class="flex_logo">
+                    <h1><span class="badge bg-primary m-5">Завдання до цього тесту ще не створені!</span></h1>
+                </div>
+                <div class="flex_logo">
+                    <a href="{% url 'detail_course' course %}" class="btn btn-primary login-button m-5">Назад до курсу</a>
+                </div>
+        {% endif %}
+    {% endif %}
+
+
+
+
+
+
+
+
+
+{%endblock%}

@@ -1,0 +1,26 @@
+{%load static%}
+<link rel="stylesheet" href="{%static 'staticPages/css/header/header.css'%}">
+<nav class="navbar navbar-light bg-light">
+          <div class="container-xxl">
+                <a class="navbar-brand "  href="{%url 'index_page'%}">
+                    <span class="big-logo">ReCode</span>
+                </a>
+                <ul class="nav">
+                      <li class="nav-item ">
+                        <a class="nav-link nav-element " href="{%url 'index_page'%}">Головна</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link  nav-element " href="{%url 'about'%}">Про нас</a>
+                      </li>
+<!--                      <li class="nav-item">-->
+<!--                        <a class="nav-link  nav-element " href="{%url 'tips'%}">Підказки</a>-->
+<!--                      </li>-->
+<!--                      <li class="nav-item">-->
+<!--                        <a class="nav-link  nav-element " href="{%url 'faq'%}">FAQ</a>-->
+<!--                      </li>-->
+
+                </ul>
+
+                <a href='{% url "auth:begin" "google-oauth2" %}' class="btn btn-primary login-button" role="button" data-bs-toggle="button">Увійти</a>
+          </div>
+</nav>

@@ -1,0 +1,136 @@
+.wrapper_course_block{
+    margin-top:5%;
+}
+.course_img{
+    height:300px;
+}
+.title_course_card_position{
+    text-align:center;
+}
+.users__button{
+    letter-spacing: 2px;
+}
+.users__button:hover{
+    background-color:#000;
+    transition:all 1.1s ease 1ms
+
+}
+.users__button:not(hover){
+    background-color:#0d6efd;
+    transition:all 1.1s ease 1ms
+
+
+}
+.card_with_test{
+    position:relative;
+    margin-top:5%;
+    margin-bottom:5%;
+    width:70%;
+    left:15%;
+
+}
+.user_logo_in_detail{
+    height:30px;
+
+
+
+}
+.btns{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   flex-wrap:wrap;
+}
+.btns *{
+   margin:10px;
+
+}
+
+.close_style{
+    margin-left:20px;
+    margin-bottom:20px;
+
+
+
+}
+.close_style2{margin-left:40px;display:block;}
+.deleteUser{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   flex-wrap:wrap;
+
+}
+.text_pos{
+    position:relative;
+    top:10%;
+
+
+}
+.header_flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap:wrap;
+
+}
+
+
+.nav-element,
+        .login-button,
+        .big-logo{
+            letter-spacing: 2px;
+        }
+        .nav-element:hover{
+            color:#000;
+            transition:all 1.1s ease 1ms
+        }
+        .nav-element:not(hover){
+            color:#0d6efd;
+            transition:all 1.1s ease 1ms
+
+        }
+        .login-button:hover{
+                background-color:#000;
+
+                transition:all 1.1s ease 1ms
+
+
+        }
+        .login-button:not(hover){
+              background-color:#0d6efd;
+              transition:all 1.1s ease 1ms
+
+
+        }
+
+
+
+.pero,.pero2{
+    font-size:25px;
+    margin-left:20px;
+    text-decoration: none;
+    opacity:0.6;
+    transition:0.8s;
+    margin-bottom: 5px;
+
+    
+
+
+}
+.pero2{margin-bottom: 25px;}
+.pero:hover, .pero2:hover{
+    opacity:1;
+
+}
+.subjects{
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    align-items: center;
+    flex-wrap:wrap;
+
+}

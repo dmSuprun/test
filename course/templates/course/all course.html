@@ -1,0 +1,32 @@
+{% extends "course/course-layout.html" %}
+{%load static%}
+{%block styles%}<link rel="stylesheet" href="{%static 'course/css/all_course_style.css'%}">{%endblock%}
+
+
+{%block content%}
+    <div class="grid-4-block-with-course">
+        {%for course, teachers in courses%}
+
+            <div class="card card_marg" style="width: 18rem;">
+                  <div class="card-body">
+                        <h4 class="card-title">{{course.name}}</h4>
+                        <p class="text-muted">Викладач:
+                            {%for teacher in teachers%}
+                                {{teacher}}
+                            {%endfor%}
+                        </p>
+                        <p class="text-muted">Предмет: {{course.subject}}</p>
+                        <a href="{{ course.get_absolute_url }}" class="btn btn-primary detail-course-button">Докладніше</a>
+                  </div>
+            </div>
+        {%endfor%}
+
+
+
+
+
+
+
+
+    </div>
+{%endblock%}

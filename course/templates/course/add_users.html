@@ -1,0 +1,37 @@
+{% extends "course/course-layout.html" %}
+{% load static%}
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'course/css/forms_css.css'%}">
+{%endblock%}
+
+{%block content%}
+    <h1 class="instruction-title"><span class="badge bg-primary">{{title}}</span></h1>
+    <ul class="instruction-list">
+        <li class="instruction__item"> Створити таблицю в Excel, з однією колонкою - електронними адресами майбутніх студентів</li>
+        <li class="instruction__item"> Зберегти цей файл у форматі CSV</li>
+        <li class="instruction__item"> Завантажити його у форму нижче</li>
+        {% if add_teacher%}
+            <li class="instruction__item"> Бажаєте зарееструвати всього одного викладача? Тоді скористуйтесь <a href="{% url 'add_only_one_teacher' course.course_slug %}" class="link-primary">формою</a>!</li>
+        {%else%}
+            <li class="instruction__item"> Бажаєте зарееструвати всього одного учня? Тоді скористуйтесь <a href="{% url 'add_only_one_student' course.course_slug %}" class="link-primary ">формою</a>!</li>
+        {%endif%}
+
+
+
+    </ul>
+
+
+
+     <form enctype="multipart/form-data"  class="add_user_form"  method="post" >
+        {% csrf_token %}
+         <div class="form_body">
+            {{form.csv_file_with_emails}}
+         </div>
+        <div class="form_errors">
+            {{form.csv_file_with_emails.errors}}
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg send-file-btn">Зареєструвати</button>
+
+    </form>
+
+{%endblock%}

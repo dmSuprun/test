@@ -1,0 +1,47 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+{% load designer_tags %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/designer.css'%}">
+{% endblock %}
+
+{%block content%}
+    <div class="flex">
+        {% if count_test == 0 %}
+            <h1><span class="badge bg-primary mt-5 mb-3 position">Ви ще не створили тести!</span></h1>
+        {%else%}
+            <h1><span class="badge bg-primary mt-5 mb-3 position">Мої тести</span></h1>
+        {% endif %}
+    </div>
+
+    <div class="flex">
+        {% if count_test == 0 %}
+            <a href="{% url 'index_page'  %}" class="btn btn-primary login-button m-3">На головну</a>
+            <a href="{% url 'create_test' %}" class="btn btn-success success_btn m-3">Створити тест</a>
+
+        {% else %}
+            {%for test in my_tests%}
+
+                <div class="card text-center text-bg-light" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Назва: {{test.name_test}}</h5>
+                        <p class="card-text">Опис тесту: {{test.theme_test}}</p>
+                        <p class="card-text">Кількість завдань: {%get_num_section_in_test test.slug%}</p>
+                        <a href="{% url 'create_task' test.slug %}" class="btn btn-warning">Редагувати</a>
+
+                    </div>
+                </div>
+
+
+            {%endfor%}
+        {% endif %}
+
+
+    </div>
+
+
+
+{%endblock%}
+
+{%block script%}   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>{%endblock%}

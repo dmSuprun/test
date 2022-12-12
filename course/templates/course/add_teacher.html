@@ -1,0 +1,21 @@
+{% extends "course/course-layout.html" %}
+{% load static%}
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'course/css/forms_css.css'%}">
+{%endblock%}
+
+
+{%block content%}
+   <div class="container_center">
+        <h1><span class="badge bg-primary mt-5 mb-5 logo">Додати викладача</span></h1>
+    </div>
+    <form method="post" >
+        {% csrf_token %}
+        <div class="form_label mb-5"><span class="name_label">{{form.email.label}} учня</span>: <span class="input">{{form.email}}</span></div>
+        <div class="form_label form_errors st_error  mb-5">{{form.email.errors}}</div>
+        <div class="container_center">
+             <button class=" btn btn-primary button_sand mt-5 mb-3 login-button" type="submit">Створити</button>
+        </div>
+
+    </form>
+{%endblock%}

@@ -1,0 +1,132 @@
+{% extends "staticPages/profile/profile-layout.html" %}
+{%load static%}
+
+
+
+{%block about_user%}
+        <h4 class="card-title">{{user.first_name}} {{user.last_name}}</h4>
+        <p class="text-muted">Курси:
+                {% for course in courses%}
+                        {{course}}
+                {%endfor%}
+        </p>
+        <hr>
+        <p class="text-muted">Кількість учнів:</p>
+        {%for course, num_stud in num_students_on_course%}
+                <p class="text-muted teacher-margin"> {{course}} - {{num_stud}}</p>
+        {%endfor%}
+        <p class="text-muted">Середній бал:</p>
+        {%for c,av_m in averages_mark%}
+            <p class="text-muted teacher-margin"> {{c.name}} - {{av_m}}</p>
+        {%endfor%}
+
+
+
+
+
+{%endblock%}
+
+
+{%block information_in_profile%}
+    <div class="center_logo_container">
+        <h1> <span class="badge bg-primary title__statistic">Статистика курсів</span></h1>
+
+    </div>
+
+         <table class="table table-striped mt-5 mb-5">
+            <thead>
+                <tr>
+                    <th scope="col" width="40%">Курс</th>
+                    <th scope="col" width="15%">К-сть студентів</th>
+                    <th scope="col" width="15%">К-сть призначених тестів</th>
+                    <th scope="col" width="10%">К-сть повністю протестованих учнів</th>
+                    <th scope="col" width="15%">Середній бал</th>
+                </tr>
+            </thead>
+            <tbody>
+            {%for course ,av_mark in averages_mark%}
+                <tr>
+                    <td>{{course.name}}</td>
+                    <td>
+                        {%for course_num_stud ,num_stud in num_student_in_course%}
+                            {% if course_num_stud == course%}
+                                {{num_stud}}
+                            {%endif%}
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {%for course_count_test,count_test in count_tests%}
+                            {% if course_count_test == course%}
+                                {{count_test}}
+                            {%endif%}
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {%for course_user,num_all_complete in num_students_who_complete_all_assign_test %}
+                            {% if course_user == course%}
+                                {{num_all_complete}}
+                            {%endif%}
+                        {%endfor%}
+                    </td>
+                    <td>{{av_mark}}</td>
+                </tr>
+            {%endfor%}
+            </tbody>
+         </table>
+        <div class="center_logo_container">
+            <h1> <span class="badge bg-primary title__statistic">Статистика тестів</span></h1>
+
+        </div>
+
+         <table class="table table-striped mt-5 mb-5">
+            <thead>
+                <tr>
+                    <th scope="col" width="30%">Курс</th>
+                    <th scope="col" width="30%">Тест</th>
+                    <th scope="col" width="15%">К-сть наборів для перевірки</th>
+                    <th scope="col" width="15%">Кількість проходжень</th>
+                    <th scope="col" width="10%">Середній бал</th>
+                </tr>
+            </thead>
+            <tbody>
+            {%for course ,test_averag in test_average_in_course%}
+                {%for test, averag in test_averag.items %}
+                    <tr>
+                        <td>{{course}}</td>
+                        <td>{{test.name_test}}</td>
+                        <td>
+                            {%for t ,tc_num in test_and_num_testcases%}
+                                {% if test == t%}
+                                    {{tc_num}}
+                                {%endif%}
+                            {%endfor%}
+                        </td>
+                        <td>
+                            {%for course_tmp ,test_with_passage_num in passage_num%}
+                                {% if course_tmp == course%}
+                                    {%for test_tmp ,passage_num_tmp in test_with_passage_num.items %}
+                                        {%if test_tmp == test%}
+                                            {{passage_num_tmp}}
+                                        {%endif%}
+
+
+                                    {%endfor%}
+
+                                {%endif%}
+                            {%endfor%}
+                        </td>
+                        <td>{{averag}}</td>
+                    </tr>
+                {%endfor%}
+            {%endfor%}
+
+
+
+            </tbody>
+         </table>
+
+
+{%endblock%}
+
+
+

@@ -1,0 +1,81 @@
+{% extends "course/course-layout.html" %}
+{%load static%}
+
+{%block styles%}<link rel="stylesheet" href="{%static 'course/css/results.css'%}">{%endblock%}
+
+{%block content%}
+    {% if no_res %}
+        <div class="flex_logo">
+            <h1><span class="badge bg-primary m-5">Цей користувач ще не тестувавсь!</span></h1>
+        </div>
+        <div class="flex_logo">
+            <a href="{% url 'read_result' test.slug course.course_slug %}" class="btn btn-primary m-5">Всі результати</a>
+            <a href="{% url 'detail_course' course.course_slug %}" class="btn btn-primary m-5">Назад до курсу</a>
+
+        </div>
+    {% else %}
+        <div class="flex_logo">
+            {% if type == 'teacher'%}
+                <a href="{% url 'delete_result' test.slug course.course_slug username_this_detail_user%}" onclick="return deleteResult()" class="btn btn-close"></a>
+
+            {% endif%}
+            <h1><span class="badge bg-primary m-5">Результати {{user}} </span></h1>
+
+
+
+        </div>
+        <div class="flex_logo">
+            <h3>Результат - <span class="badge bg-info">{{complete_result.user_point}} / {{complete_result.test.max_test_result}}</span></h3>
+            <h3 class="m-3">Завершив - <span class="badge bg-info ">{{complete_result.date_completion}} </span></h3>
+        </div>
+        {% for task,task_num in tasks %}
+            <h3>Завдання <span class="badge m-3 bg-primary">{{task_num}}</span></h3>
+            {% for answer,section in answers %}
+                {%if section == task %}
+                    <textarea cols="20" rows="10" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " disabled >{{answer.answer}}</textarea>
+                    <table class="table table-striped">
+                        <tr>
+                              <th scope="col">Вхідні дані</th>
+                              <th scope="col">Тип вхідних даних</th>
+                              <th scope="col">Вихідні дані</th>
+                              <th scope="col">Тип вихідних даних</th>
+                              <th scope="col">Результат перевірки</th>
+                        </tr>
+                        {% for result_obj,answer_obj in testcases %}
+                            {%if answer == answer_obj %}
+                                <tr >
+                                    <td>{{result_obj.data_on_which_they_checked.input_test_data}}</td>
+                                    <td>{{result_obj.data_on_which_they_checked.input_test_data_type}}</td>
+                                    <td>{{result_obj.data_on_which_they_checked.output_test_data}}</td>
+                                    <td>{{result_obj.data_on_which_they_checked.output_test_data_type}}</td>
+                                    {% if result_obj.testing_result == True %}
+                                        <td>&#9989;</td>
+                                    {%else%}
+                                        <td>&#10060;</td>
+                                    {%endif%}
+                                </tr>
+                            {%endif%}
+                        {%endfor%}
+                    </table>
+                {%endif%}
+            {%endfor%}
+        {% endfor  %}
+    {% endif %}
+{%endblock%}
+{%block scripts%}
+{% if type == 'teacher'%}
+    <script>
+        function deleteResult(){
+            const checker = confirm('Видалити цей результат? Цю дію неможливо відмінити!')
+            if (checker){
+                return true
+            }
+            return false
+
+        };
+    </script>
+
+{%endif%}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+{%endblock%}
+

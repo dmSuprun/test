@@ -1,0 +1,27 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/test_designer.css'%}">
+{%endblock%}
+
+
+
+{%block content%}
+<h1><span class="badge bg-primary mt-5 mb-5 logo">Створити новий тест</span></h1>
+
+<form  method="post">
+    {% csrf_token %}
+    <div class="form_label mb-5"><span class="name_label">{{form.name_test.label}}</span>: <span class="input">{{form.name_test}}</span></div>
+    <div class="form_label error mb-5">{{form.name_test.errors}}</div>
+    <div class="form_label mb-5"><span class="name_label">{{form.theme_test.label}}</span>: <span class="input">{{form.theme_test}}</span></div>
+    <div class="form_label mb-5"><span class="name_label">{{form.max_test_result.label}}</span>: <span class="input">{{form.max_test_result}}</span></div>
+    <div class="form_label error mb-5">{{form.max_test_result.errors}}</div>
+
+    <button class=" btn btn-primary button_sand mt-5 mb-3 login-button" type="submit">Створити завдання</button>
+</form>
+
+{%endblock%}
+
+
+

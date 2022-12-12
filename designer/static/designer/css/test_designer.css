@@ -1,0 +1,83 @@
+
+.name_label{
+    font-size:21px;
+
+}
+.error{
+
+
+}
+.error ul li{
+    color:#dc3545;
+    margin-top:3%;
+
+
+    list-style-type:none;
+
+
+}
+.error ul li::before{
+    content:'\26A0 \0020'
+
+
+}
+.button_sand{
+    position:relative;
+    left:45%;
+    font-size:18px;
+}
+.logo{
+    position:relative;
+    left:40%;
+}
+
+.detail_input_label{
+    font-size:21px
+
+}
+.input{
+    font-size:21px;
+}
+.flex_space_between{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content: space-around;
+    flex-wrapp:wrapp;
+}
+.label{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.btn_block{
+    display:block;
+}
+
+.nav-element,
+        .login-button,
+        .big-logo{
+            letter-spacing: 2px;
+        }
+        .nav-element:hover{
+            color:#000;
+            transition:all 1.1s ease 1ms
+        }
+        .nav-element:not(hover){
+            color:#0d6efd;
+            transition:all 1.1s ease 1ms
+
+        }
+        .login-button:hover{
+                background-color:#000;
+
+                transition:all 1.1s ease 1ms
+
+
+        }
+        .login-button:not(hover){
+              background-color:#0d6efd;
+              transition:all 1.1s ease 1ms
+
+
+        }

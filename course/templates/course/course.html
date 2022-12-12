@@ -1,0 +1,212 @@
+{% extends "course/course-layout.html" %}
+
+{%load static%}
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'course/css/course_style.css'%}">
+{%endblock%}
+
+{%block content%}
+
+    <div class="wrapper_course_block">
+          <div class="card mb-3">
+               {% if type == 'teacher' %}
+                    <div class="card-header">
+                        <ul class="nav nav-pills card-header-pills">
+                          <li class="nav-item">
+                            <a class="nav-link nav-element" href="{% url 'add_teachers' post.course_slug %}">Додати викладачів</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link nav-element" href="{% url 'add_students' post.course_slug %}">Додати учнів</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link nav-element" href="{% url 'assign_test' post.course_slug %}">Призначити</a>
+                          </li>
+
+                          <li class="nav-item">
+                              <a href="{% url 'delete_course' post.course_slug %}"  onclick=" return deleteCourse()" class="nav-link link-danger nav-element ">Видалити курс</a>
+                          </li>
+                        </ul>
+                    </div>
+              {%endif%}
+              <img src="https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360861_1280.png"  class="card-img-top course_img" alt="...">
+              <div class="card-body">
+                  <div class="header_flex">
+                      <div  id="courseName"><h4 class="card-title title_course_card_position" id="courseName__text"  >Курс: {{post.name}}</h4></div>
+                      {%if type == 'teacher'%}
+                            <div class="pero" onclick="updateCourseName()" id="course__pero" >&#9997;</div>
+                      {%endif%}
+
+                  </div>
+
+
+                <div class="subjects">
+                    <div id="subject"><p class="text-muted" >Предмет: {{post.subject}}</p></div>
+                     {%if type == 'teacher'%}
+                        <div class="pero pero2" onclick="updateCourseSubject()" id="course__pero__subject" >&#9997;</div>
+                    {%endif%}
+                </div>
+
+                <p class="text-muted">Викладач:
+                    {% for teacher_email, teacher_name in teachers %}
+                        {{teacher_name}}
+                    {%endfor%}
+                </p>
+                <p class="text-muted">Створено: {{post.date_creating}}</p>
+                <div class="btns">
+
+                    <a class="btn btn-primary users__button" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Учасники курсу
+                    </a>
+
+                </div>
+                  <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <h5 class="card-title title_course_card_position">Викладачі({{num_teachers}})</h5>
+                        {%for this_teacher_email, teacher_name in teachers%}
+                            <div class="deleteUser">
+                                <p class="text-muted"><img class="user_logo_in_detail" src="https://cdn.pixabay.com/photo/2016/04/22/04/44/graduation-1345123_1280.png">{{teacher_name}}</p>
+                                {% if type == 'teacher' %}
+                                    <a  onclick="return deleteFunc()" href="{% url 'delete_teacher'  this_teacher_email post.course_slug %}" class="btn-close close_style" ></a>
+                                {% endif %}
+                            </div>
+                        {%endfor%}
+                        <hr>
+                        <h5 class="card-title title_course_card_position">Учні({{num_students}})</h5>
+                        {%for student_email,student in students %}
+                            <div class="deleteUser">
+                                <p class="text-muted text_pos"><img height="20" src="https://cdn.pixabay.com/photo/2016/03/19/04/40/cap-1266204_1280.png" alt="">{{student}}</p>
+                                {% if type == 'teacher' %}
+                                    <a  onclick="return deleteFunc()" href="{% url 'delete_student'  student_email post.course_slug %}" class="btn-close close_style" ></a>
+                                {% endif %}
+                            </div>
+
+
+                        {%endfor%}
+
+                    </div>
+                </div>
+              </div>
+            </div>
+
+
+            {%for assign_test in tests%}
+                <div class="card_with_test">
+                    <div class="card text-center card_with_test__item ">
+                        <div class="card-header header_flex">
+                            Додано тест до курсу!
+                             {% if type == 'teacher' %}
+                                 <a href="{% url 'delete_assign_test'  post.course_slug  assign_test.test.slug %}" onclick="return deleteAssignTest()" class=" btn-close close_style2"></a>
+
+                            {%endif%}
+
+
+                        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{assign_test.test.name_test}} </h5>
+                        <p class="card-text">Автор: {{assign_test.test.author_of_test.first_name}} {{assign_test.test.author_of_test.last_name}}</p>
+                        <p class="card-text">Тема тесту: {{assign_test.test.theme_test}}</p>
+                        <p class="card-text">Максимальний бал: {{assign_test.test.max_test_result}}</p>
+                        {%if assign_test.test.time_on_test == None %}
+                            <p class="card-text">Час проходження: без обмежень</p>
+                        {%else%}
+                            <p class="card-text">Час проходження: {{assign_test.test.time_on_test}}хв</p>
+                        {%endif%}
+                        {% if type == 'teacher' %}
+                            {% if assign_test.test in this_teacher_assign_test %}
+                            <a href="{% url 'create_task'  assign_test.test.slug %}" class="btn btn-primary users__button  ">Редагувати</a>
+                            {% endif %}
+                            <a href="{% url 'read_result' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Результати</a>
+
+
+                        {%endif%}
+
+                        <a href="{% url 'starttest' post.course_slug assign_test.test.slug %}" class="btn btn-primary users__button">Тестуватись</a>
+                        {% for user_email,complete_test in student_completed_tests%}
+                            {%for test_result in complete_test%}
+                                {%if assign_test.test == test_result.test and user_email == request.user.email %}
+                                    <a href="{% url 'read_detail_result' assign_test.test.slug post.course_slug request.user.username%}" class="btn btn-primary users__button m-3 ">Мій результат </a>
+                                {%endif%}
+                            {%endfor%}
+                        {%endfor%}
+                    </div>
+              <div class="card-footer text-muted">
+                {{assign_test.assigned_date}}
+              </div>
+                </div>
+            </div>
+
+        {%endfor%}
+
+    </div>
+
+
+
+{%endblock%}
+
+
+{%block scripts%}
+    {% if type == 'teacher' %}
+        <script>
+
+            function updateCourseName(){
+                document.getElementById('courseName').innerHTML = ''
+                document.getElementById('course__pero').innerHTML = ''
+
+                document.getElementById('courseName').innerHTML = '<form method="post" action="/course/update_course_name/{{post.course_slug}}/" >{%csrf_token%}<h5 class="card-title title_course_card_position">Нова назва: <input required value="{{post.name}}" name="newName" id="new_name_value" type="text"  class="form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded  "><button class="btn btn-primary " type="submit">Змінити</button> <div class="btn btn-primary " onclick="returnOldName()" >Відмінити</div></h5></form>'
+
+
+
+
+            };
+
+            function returnOldName(){
+
+                document.getElementById('courseName').innerHTML = '<h4 class="card-title title_course_card_position" id="courseName__text" >Курс: {{post.name}}</h4>'
+                document.getElementById('course__pero').innerHTML = '&#9997;'
+
+            };
+            function updateSubject(){
+            };
+            function deleteFunc(e){
+                var deleteOrNot = confirm("Ви дійсно бажаєте видалити цього учасника з курсу?")
+                if (deleteOrNot){
+                    return true
+                }
+                return false
+
+            };
+
+            function updateCourseSubject(){
+                document.getElementById('subject').innerHTML = ''
+                document.getElementById('course__pero__subject').innerHTML = ''
+                document.getElementById('subject').innerHTML = '<form method="post" action="/course/update_course_subject/{{post.course_slug}}/" >{%csrf_token%}<h5 class="card-title title_course_card_position">Нова назва предмету: <input required value="{{post.subject}}" name="newSubject"  type="text"  class="form-control shadow-lg p-3 mb-3 mt-3 bg-white rounded  "><button class="btn btn-primary mb-3" type="submit">Змінити</button> <div class="btn btn-primary mb-3 " onclick="OldCourseSubject()" >Відмінити</div></h5></form>'
+
+
+            };
+            function OldCourseSubject(){
+                document.getElementById('subject').innerHTML = '<p class="text-muted" >Предмет: {{post.subject}}</p>'
+                document.getElementById('course__pero__subject').innerHTML = '&#9997;'
+
+
+            };
+            function deleteCourse(){
+                const checkDelete = confirm("Ви дійсно бажаєте видалити цей курс?")
+                if (checkDelete){
+                    return true
+                }
+                return false
+            };
+            function deleteAssignTest(){
+                const checkDeleteTest = confirm("Ви дійсно бажаєте видалити цей  тест з курсу?")
+                if (checkDeleteTest){
+                    return true
+                }
+                return false
+            };
+
+
+        </script>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+{%endblock%}
+

@@ -1,0 +1,161 @@
+
+
+/*______________________________________ main style__________________________________-*/
+        .not_padding{
+            padding-left:0;
+            padding-right:0;
+        }
+
+        .hello-block-img{
+            width:100%;
+            padding:300px 0px 420px 0px;
+            background: url("https://cdn.pixabay.com/photo/2020/06/04/11/10/bulb-5258341_1280.jpg") no-repeat;
+            background-size: cover;
+            height:auto;
+
+        }
+
+
+        .logo-hello{
+
+            color:#fff;
+
+            font-size:64px;
+        }
+        .logo-text{
+
+            color:#fff;
+
+            font-size:32px;
+        }
+
+        .big_button{
+            font-family: Montserrat;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        .big_button__text{
+            position: relative;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0px 50px;
+            border-radius: 50px;
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #000000c5;
+            letter-spacing: 5px;
+            transition: all 0.8s ease 0s;
+            top: 0;
+            overflow: hidden;
+
+        }
+
+
+
+        .big_button__text:before,
+        .big_button__text:after{
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background-color: #eee;
+            transition: all 0.8s ease 0s;
+
+        }
+
+        .big_button__text:before{
+            left: 0;
+            z-index: 2;
+        }
+
+        .big_button__text:after{
+            right: 0;
+        }
+        .big_button__text span{
+            position: relative;
+            z-index: 2;
+        }
+
+
+
+        .big_button:before,
+        .big_button:after{
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #798897;
+            top:-10px;
+            left: 50%;
+            transition: all 0.8s ease 0s;
+            z-index: 1;
+            margin: 0px 0px 0px -40px;
+
+        }
+
+        .big_button:before{
+            animation: rotate 20s infinite linear;
+        }
+        .big_button:after{
+            animation: rotate 25s infinite linear;
+
+        }
+
+
+        .big_button:hover:before,
+        .big_button:hover:after{
+            left: 100%;
+            opacity: 0;
+
+        }
+        .big_button:hover .big_button__text:before,
+        .big_button:hover .big_button__text:after{
+            background-color: #0AABA8;
+
+        }
+
+        .big_button:hover  .big_button__text:before{
+            width: 100%;
+        }
+
+        .big_button:hover .big_button__text{
+            top: -10px;
+            color: #fff;
+            transition: all 0.5s ease 0.2s;
+            box-shadow: 0 5px 0px 0 #007674;
+        }
+        .big_button:active .big_button__text{
+            top: -7px;
+            transition: all 160ms ease 0ms;
+            box-shadow: 0 2px 0px 0  #0AABA8;
+        }
+        @keyframes rotate{
+            0%{
+                transform:rotate(0deg);
+            }
+
+            100%{
+
+                transform:rotate(360deg);
+
+            }
+        }
+        .start_button{
+            padding: 50px 205px;
+
+        }
+        .padding-main-part{
+            padding:50px 0px 0px 0px;
+        }
+
+
+/*________________________________________end main______________________________________*/
+
+
+/*footer style*/
+
+/*end footer*/

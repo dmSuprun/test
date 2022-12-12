@@ -1,0 +1,7 @@
+{%if type == "teacher" %}
+    {%include 'staticPages/profile/super-profile.html'%}
+{%elif type == "student" or type == 'anonymousStudent'  %}
+    {%include 'staticPages/profile/student-profile.html'%}
+{%else%}
+    {%include 'staticPages/index-layout.html'%}
+{%endif%}

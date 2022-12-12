@@ -1,0 +1,42 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/designer.css'%}">
+{% endblock %}
+
+
+{%block content%}
+    <div class="flex">
+        <div class="card text-bg-primary mb-3 child_container" style="max-width: 18rem;">
+            <div class="card-header">Конструктор курсів</div>
+            <div class="card-body">
+                <h5 class="card-title">Тут можна швидко створити курс!</h5>
+                <p class="card-text">Щоб зареєструвати курс необхідно лише перейти за посиланням, ввести назву нового курсу,предмет який буде вивчатись на ньому та зазначти викладача, та почати роботу вже з створеним курсом!</p>
+                <a href="{%url 'create_course'%}" class="btn btn-light " >Створити курс</a>
+            </div>
+        </div>
+
+        <div class="card text-bg-primary mb-3 child_container" style="max-width: 18rem;">
+            <div class="card-header">Конструктор тестів</div>
+            <div class="card-body">
+                <h5 class="card-title">А тут швидко створити тест!</h5>
+                <p class="card-text">Щоб створити перейдіть за посиланням, створіть новий тест та почніть додавати завдання до нього! Потім варто додати дані для перевірки! Завершивши створення почніть використовувати тест!</p>
+                <a href="{%url 'create_test'%}" class="btn btn-light " >Створити тест</a>
+
+            </div>
+        </div>
+        <div class="card text-bg-primary mb-3 child_container" style="max-width: 18rem;">
+            <div class="card-header">Мої тести</div>
+            <div class="card-body">
+                <h5 class="card-title">Тут можна переглядати та редагувати вже створені тести!</h5>
+                <p class="card-text">Щоб переглянути перейдіть за посиланням, та оберіть потрібний вам тест! Бажаєте редагувати? Натисніть на однойменну кнопку, та одразу почніть редагувати свій тест!</p>
+                <a href="{%url 'show_all_tests' %}" class="btn btn-light " >Переглянути тести</a>
+
+            </div>
+        </div>
+    </div>
+
+
+{%endblock%}
+

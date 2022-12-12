@@ -1,0 +1,39 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/course_designer.css'%}">
+
+{%endblock%}
+
+
+
+{%block content%}
+        <div class="logo_flex">
+            <h1><span class="badge bg-primary mt-5 mb-5 ">Редагувати тесткейс № {{testcase_num}}</span></h1>
+        </div>
+
+        <div class="flex_space_between mb-5">
+            <a class="btn btn-success" style="letter-spacing:2px;" href="#" onclick="">Зберегти зміни</a>
+            <a class="btn btn-danger" style="letter-spacing:2px;" href="{% url 'delete_testcase'  testcase_pk %}" onclick="return checkDelete()">Видалити тесткейс</a>
+        </div>
+
+
+
+
+
+{%endblock%}
+
+{%block script%}
+<script>
+    function checkDelete(){
+        var check = confirm('Ви дійсно бажаєте видалити цей тесткейс?')
+        if (check){
+            return true
+        }
+        return false
+    };
+</script>
+
+
+{%endblock%}

@@ -1,0 +1,558 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/course_designer.css'%}">
+{%endblock%}
+
+{%block content%}
+    <div class="position">
+        <h1><span class="badge bg-primary mt-5 mb-5 position">Створити тесткейс</span></h1>
+    </div>
+    <form  method="post" id="addTask">
+        {% csrf_token %}
+
+
+        <div id="no_arg_error" class="form_errors task_position" ></div>
+
+        <div class="argContainer mt-5 m-3">
+            <div id="allFuncArguments"></div>
+        </div>
+
+        <div class="flex_row">
+            <div class="flex_container" id="delte_input_controls" >
+                <div class="addButton" onclick="addArgumentFunc()">Додати аргумент </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="outputContainer mt-5 m-3">
+            <div id="allOutputArguments"></div>
+        </div>
+
+        <div class="flex_row">
+            <div class="flex_container" id="delte_output_controls" >
+                <div class="addButton" onclick="addOuptutValueFunc()">Додати результат </div>
+            </div>
+        </div>
+
+        <div id="validation_error" class="form_errors task_position" ></div>
+        <div class="outputContainer mt-5 m-5">
+            <div id="testcases"><div id="testcases_wrapper"></div></div>
+        </div>
+        <div class="flex_row">
+            <div class="flex_container" id="delete_case_controls" >
+                <div class="addButton" onclick="addTestCase()">Додати тесткейс </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="flex_row mt-5">
+            <div class="flex_container"  >
+                <button class="btn btn-primary" type="submit">Відправити</button>
+            </div>
+        </div>
+
+
+    </form>
+
+
+{%endblock%}
+
+{%block script%}
+<script>
+    // inputs
+        var countArgument = 0;
+        function addArgumentFunc(){
+            countArgument++;
+            if (countArgument == 1){
+                document.getElementById('delte_input_controls').insertAdjacentHTML('afterbegin', '<a class="btn-close position_close m-3" id="remove_btn_1" onclick="deleteArgument()"></a>');
+            }
+            const funcArgContainer = document.getElementById('allFuncArguments');
+            funcArgContainer.insertAdjacentHTML('beforeend','<div id="argument'+countArgument+'"><div class="typeFloatError" id="floatError_'+countArgument+'"></div><div class="typeFloatError" id="lists_'+countArgument+'"></div>'+
+            '<div class="input-group  input-group-lg" style="width:auto;">'+
+                '<label class="input-group-text" >Аргумент №'+countArgument+'</label>'+
+                '<select class="form-select" required onchange="checkFloatType(this,'+countArgument+')" name="argumentConfig" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                    '<option value="list">list</option>'+
+                    '<option value="tuple">tuple</option>'+
+                    '<option value="set">set</option>'+
+                    '<option value="frozenset">frozenset</option>'+
+                    '<option value="dict">dict</option>'+
+                '</select>'+
+            '</div><div class="flex_row"><div id="items_'+countArgument+'"></div></div><div id="types_list_'+countArgument+'" class="mt-3 mb-3 flex_row"></div></div>')
+            if(testcaseNum>0){
+                for(var i=1; i<(testcaseNum+1);i++){
+                    var case_wrap = document.getElementById('caseWrap_'+i).childNodes;
+
+
+                    for(var j = 0; j < case_wrap.length; ++j){
+                        if(j==1 ){
+                            var div_with_data = case_wrap[j].insertAdjacentHTML('beforeend','<input style="width:100%;" type="text" name="inp_value_'+i+'" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось" required="">')
+
+                        }
+                    }
+                }
+            }
+
+
+
+        };
+        function deleteArgument(){
+            const argument = document.getElementById('allFuncArguments').lastChild;
+            argument.remove()
+
+            countArgument--;
+            if (countArgument == 0){
+                document.getElementById('remove_btn_1').remove()
+                while (document.getElementById('testcases_wrapper').firstChild) {
+                    document.getElementById('testcases_wrapper').removeChild(document.getElementById('testcases_wrapper').firstChild);
+                }
+
+                remove_btn_3.remove()
+                testcaseNum = 0
+                return true
+
+            }
+
+            for(var i=1; i<(testcaseNum+1);i++){
+                var case_wrap = document.getElementById('caseWrap_'+i).childNodes;
+
+
+                for(var j = 0; j < case_wrap.length; ++j){
+                    if(j==1 ){
+                        var div_with_data = case_wrap[j].lastChild.remove()
+
+
+                    }
+
+                }
+
+            }
+
+        };
+        function checkFloatTypeInItems(obj, argument_num){
+            if (obj.value == 'float'){
+                document.getElementById('floatError_'+argument_num).innerHTML="<p>Використання типу float призводить до неточності результатів тестування!</p>"
+            }else{
+                document.getElementById('floatError_'+argument_num).innerHTML=""
+
+
+            }
+        };
+
+        function checkFloatType(object, numCase){
+            if (object.value == 'float'  ) {
+
+                document.getElementById('floatError_'+numCase).innerHTML = "<p>Використання типу float призводить до неточності результатів тестування!</p>"
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML=''
+
+                document.getElementById('items_'+numCase).innerHTML=''
+
+
+            }else if(object.value == 'list'){
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('items_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+
+                addListItems(numCase)
+                document.getElementById('floatError_'+numCase).innerHTML=''
+
+
+            }else if(object.value == 'tuple'){
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('items_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+
+                addListItems(numCase)
+                document.getElementById('floatError_'+numCase).innerHTML=''
+
+            }else if(object.value == 'set' ){
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('items_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+
+                addListItems(numCase)
+                document.getElementById('floatError_'+numCase).innerHTML=''
+
+            }else if(object.value == 'frozenset'){
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('items_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+
+                addListItems(numCase)
+                document.getElementById('floatError_'+numCase).innerHTML=''
+
+            }else if(object.value == 'dict'){
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('items_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML='<p>Елементи словника, під час введення вводяться парами, пари розділяються крапкою з комою! (key1:value1;key2:value2....)</p>'
+
+                addDictItem(numCase)
+                document.getElementById('floatError_'+numCase).innerHTML=''
+            }else{
+
+                document.getElementById('items_'+numCase).innerHTML=''
+                document.getElementById('types_list_'+numCase).innerHTML=''
+                document.getElementById('lists_'+numCase).innerHTML=''
+
+                document.getElementById('floatError_'+numCase).innerHTML=''
+
+
+            }
+        };
+
+
+        function addListItems(numArg){
+
+            const item_container = document.getElementById('items_'+numArg);
+            item_container.insertAdjacentHTML('beforeend','<div>'+
+            '<div class="input-group m-3 input-group-lg" style="width:50vw;">'+
+                '<label class="input-group-text" >Тип елементів</label>'+
+                '<select class="form-select" required onchange="checkFloatTypeInItems(this,'+numArg+')"  name="listItem'+numArg+'" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                '</select>'+
+            '</div></div>')
+            document.getElementById('types_list_'+numArg).innerHTML=''
+
+        };
+
+        function addDictItem(argumentNum){
+            const item_container = document.getElementById('items_'+argumentNum);
+            item_container.insertAdjacentHTML('beforeend','<div><div class="flex_row">'+
+            '<div class="input-group  input-group-lg m-3" style="width:25vw;">'+
+                '<label class="input-group-text" >Ключ</label>'+
+                '<select class="form-select" required onchange="checkFloatTypeInItems(this,'+argumentNum+')" id="dict" name="dictKey_'+argumentNum+'" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                '</select>'+
+            '</div> <div class="dictValue mb-3 ">:</div> '+
+            '<div class="input-group m-3 input-group-lg" style="width:25vw;">'+
+                '<label class="input-group-text" >Значення</label>'+
+                '<select class="form-select" required onchange="checkFloatTypeInItems(this,'+argumentNum+')" id="dict" name="dictValue_'+argumentNum+'" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                '</select>'+
+            '</div></div></div></div>'
+
+
+            );
+            document.getElementById('types_list_'+argumentNum).innerHTML=''
+
+
+        };
+
+
+
+        // outputs value
+        var countOutputs = 0;
+        function addOuptutValueFunc(){
+            countOutputs++;
+            if (countOutputs == 1){
+                document.getElementById('delte_output_controls').insertAdjacentHTML('afterbegin', '<a class="btn-close position_close m-3" id="remove_btn_2" onclick="deleteOutput()"></a>');
+            }
+            const funcArgContainer = document.getElementById('allOutputArguments');
+            funcArgContainer.insertAdjacentHTML('beforeend','<div id="output_'+countOutputs+'"><div class="typeFloatError" id="outputFloatError_'+countOutputs+'"></div> <div class="typeFloatError" id="output_list_'+countOutputs+'"></div>'+
+            '<div class="input-group mb-3 input-group-lg" style="auto;">'+
+                '<label class="input-group-text" >Вихідне значення №'+countOutputs+'</label>'+
+                '<select class="form-select" required onchange="checkOutputFloatType(this,'+countOutputs+')" name="outputConfig" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                    '<option value="list">list</option>'+
+                    '<option value="tuple">tuple</option>'+
+                    '<option value="set">set</option>'+
+                    '<option value="frozenset">frozenset</option>'+
+                    '<option value="dict">dict</option>'+
+                '</select>'+
+            '</div><div class="flex_row"><div id="output_items_'+countOutputs+'"></div></div></div>')
+            if(testcaseNum>0){
+
+
+                for(var i=1; i<(testcaseNum+1);i++){
+                var case_wrap = document.getElementById('caseWrap_'+i).childNodes;
+
+
+                    for(var j = 0; j < case_wrap.length; ++j){
+                        if(j==2 ){
+                            var div_with_data = case_wrap[j].insertAdjacentHTML('beforeend','<input style="width:100%;" type="text" name="out_value_'+i+'" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось" required>')
+
+                        }
+                    }
+                }
+            }
+
+
+
+        };
+
+        function deleteOutput(){
+            const argument = document.getElementById('allOutputArguments').lastChild;
+            argument.remove()
+
+            countOutputs--;
+            if (countOutputs == 0){
+                document.getElementById('remove_btn_2').remove()
+                while (document.getElementById('testcases_wrapper').firstChild) {
+                    document.getElementById('testcases_wrapper').removeChild(document.getElementById('testcases_wrapper').firstChild);
+                }
+                remove_btn_3.remove()
+                testcaseNum = 0
+                return true
+            }
+            if(countOutputs>0 && countArgument>0){
+                for(var i=1; i<(testcaseNum+1);i++){
+                    var case_wrap = document.getElementById('caseWrap_'+i).childNodes;
+
+
+                    for(var j = 0; j < case_wrap.length; ++j){
+                        if(j==2 ){
+                            var div_with_data = case_wrap[j].lastChild.remove()
+
+                        }
+                    }
+                }
+            }
+
+
+
+        };
+        function addOutputListItems(numOutputArg){
+            const item_container = document.getElementById('output_items_'+numOutputArg);
+            item_container.insertAdjacentHTML('beforeend','<div>'+
+            '<div class="input-group m-3 input-group-lg" style="width:50vw;">'+
+                '<label class="input-group-text" >Тип елементів</label>'+
+                '<select class="form-select" required onchange="checkOutputFloatTypeInItems(this,'+numOutputArg+')"  name="outputlistItem'+numOutputArg+'" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                '</select>'+
+            '</div></div>')
+
+        };
+        function checkOutputFloatType(object, outputNum){
+            if (object.value == 'float'  ) {
+                document.getElementById('output_list_'+outputNum).innerHTML=''
+                document.getElementById('outputFloatError_'+outputNum).innerHTML = "<p>Використання типу float призводить до неточності результатів тестування!</p>"
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+
+
+            }else if(object.value == 'list'){
+                document.getElementById('output_list_'+outputNum).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+                addOutputListItems(outputNum)
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=''
+
+
+            }else if(object.value == 'tuple'){
+                document.getElementById('output_list_'+outputNum).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+                addOutputListItems(outputNum)
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=''
+
+            }else if(object.value == 'set' ){
+                document.getElementById('output_list_'+outputNum).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+                addOutputListItems(outputNum)
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=''
+
+            }else if(object.value == 'frozenset'){
+                document.getElementById('output_list_'+outputNum).innerHTML='<p>Елементи списку, під час введення вводяться  через крапку з комою! (item1;item2;item3...)</p>'
+
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+                addOutputListItems(outputNum)
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=''
+
+            }else if(object.value == 'dict'){
+                document.getElementById('output_list_'+outputNum).innerHTML='<p>Елементи словника, під час введення вводяться парами, пари розділяються крапкою з комою! (key1:value1;key2:value2....)</p>'
+
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+                addOutputDictItem(outputNum)
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=''
+            }else{
+                document.getElementById('output_list_'+outputNum).innerHTML=''
+
+                document.getElementById('output_items_'+outputNum).innerHTML=''
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=''
+
+
+            }
+
+        };
+        function checkOutputFloatTypeInItems(obj, outputNum){
+            if (obj.value == 'float'){
+                document.getElementById('outputFloatError_'+outputNum).innerHTML="<p>Використання типу float призводить до неточності результатів тестування!</p>"
+            }else{
+                document.getElementById('outputFloatError_'+outputNum).innerHTML=""
+
+
+            }
+        };
+        function addOutputDictItem(outputNum){
+            const item_container = document.getElementById('output_items_'+outputNum);
+            item_container.insertAdjacentHTML('beforeend','<div><div class="flex_row">'+
+            '<div class="input-group  input-group-lg m-3" style="width:25vw;">'+
+                '<label class="input-group-text" >Ключ</label>'+
+                '<select class="form-select" required onchange="checkOutputFloatTypeInItems(this,'+outputNum+')" id="dict" name="dictOutputKey_'+outputNum+'" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                '</select>'+
+            '</div> <div class="dictValue mb-3 ">:</div> '+
+            '<div class="input-group m-3 input-group-lg" style="width:25vw;">'+
+                '<label class="input-group-text" >Значення</label>'+
+                '<select class="form-select" required onchange="checkOutputFloatTypeInItems(this,'+outputNum+')" id="dict" name="dictOutputValue_'+outputNum+'" > '+
+                    '<option value="str">str</option>'+
+                    '<option value="int">int</option>'+
+                    '<option value="float">float</option>'+
+                    '<option value="bool">bool</option>'+
+                '</select>'+
+            '</div></div></div></div>'
+
+
+            );
+
+        };
+        var testcaseNum = 0
+        function addTestCase(){
+
+            if (countArgument==0 || countOutputs==0 ){
+
+                return false
+            }
+            testcaseNum++;
+            if (testcaseNum == 1){
+                document.getElementById('delete_case_controls').insertAdjacentHTML('afterbegin', '<a class="btn-close position_close m-5" id="remove_btn_3" onclick="deleteTestcase()"></a>');
+            }
+
+            var caseText = '<div id="caseWrap_'+testcaseNum+'"><div class="flex_row mb-3"><h2><span class="badge bg-success">Новий тесткейс № '+testcaseNum+'</span></h2></div>'
+            var inputText ='<div id="inputs_testcase_'+testcaseNum+'"> <input style="width:100%;" type="number" name="price" min="1"  step="1" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded" placeholder="К-сть балів за успішне проходження тесткейсу"   required> <div class="flex_row "><h5 class="card-title">Вхідні значення</h5></div>'
+            for(var i=0; i<countArgument;i++){
+                inputText += '<input style="width:100%;" type="text" name="inp_value" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось"   required>'
+            }
+            inputText+='</div>'
+            var outputText = '<div id="output_testcase_'+testcaseNum+'"> <div class="flex_row"><h5 class="card-title">Вихідні значення</h5></div>'
+            for(var i=0; i<countOutputs;i++){
+                outputText += '<input style="width:100%;" type="text" name="out_value" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded "  placeholder="Напишіть щось" required>'
+            }
+            outputText+='</div>'
+            caseText+=inputText + outputText +'<hr style="width:auto;"></div>'
+            testcases_wrapper.insertAdjacentHTML('beforeend',caseText)
+
+
+        }
+        function deleteTestcase(){
+            var child_el = testcases_wrapper.lastChild
+            child_el.remove()
+            testcaseNum--;
+            if(testcaseNum == 0){
+                remove_btn_3.remove()
+
+            }
+
+        }
+
+        document.getElementById('addTask').onsubmit = function(){
+            if (document.getElementById('allFuncArguments').hasChildNodes() && document.getElementById('allOutputArguments').hasChildNodes()){
+                no_arg_error.innerHTML = ''
+                if(document.getElementById('testcases_wrapper').hasChildNodes() == false){
+                    validation_error.innerHTML = '<p>Необхідно додати тесткейси!</p>'
+                    return false
+
+                }
+                validation_error.innerHTML = ''
+                const inputValObjects = document.getElementsByName('inp_value')
+                const outputValObjects = document.getElementsByName('out_value')
+                for (var i=0; i<inputValObjects.length; i++){
+                    var baseValue = inputValObjects[i].value.split(" ").join("")
+                    inputValObjects[i].value = baseValue
+
+                    if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
+                        inputValObjects[i].value =baseValue.slice(0, -1);
+
+                    }
+
+
+                }
+                for (var i=0; i<outputValObjects.length; i++){
+
+                    var baseValue = outputValObjects[i].value.split(" ").join("")
+                    outputValObjects[i].value = baseValue
+                    if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
+                        outputValObjects[i].value =baseValue.slice(0, -1);
+
+                    }
+
+
+                }
+
+                return true
+            }
+            no_arg_error.innerHTML = '<p>Необхідно додати аргументи!</p>'
+            return false
+
+        };
+
+
+
+
+
+
+
+
+
+
+    function functionFieldValueValidation(value){
+        // do validation for functionFieldValue
+        const ValidSymb = ['1','2','3','4','5','6','7','8','9','0','a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J','k','K','L','l','m','M','N','n','o','O','p','P','q','Q','r','R','s','S','t','T','U','u','v','V','w','W','x','X','y','Y','z','Z','_']
+            for (var i in value){
+                if(ValidSymb.includes(value[i])){
+                    continue
+                }else{
+                    return false
+                }
+            }
+            return true
+        }
+
+
+
+    function functionFieldValueValidation(value){
+        // do validation for functionFieldValue
+        const ValidSymb = ['1','2','3','4','5','6','7','8','9','0','a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J','k','K','L','l','m','M','N','n','o','O','p','P','q','Q','r','R','s','S','t','T','U','u','v','V','w','W','x','X','y','Y','z','Z','_']
+            for (var i in value){
+                if(ValidSymb.includes(value[i])){
+                    continue
+                }else{
+                    return false
+                }
+            }
+
+            return true
+        }
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+{%endblock%}
+

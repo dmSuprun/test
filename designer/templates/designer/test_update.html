@@ -1,0 +1,46 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/test_designer.css'%}">
+
+{%endblock%}
+
+
+
+{%block content%}
+<h1><span class="badge bg-primary mt-5 mb-5 logo">Конфігурація тесту</span></h1>
+
+<form  method="post">
+    {% csrf_token %}
+    <div class="form_label mb-5"><span class="label">{{form.name_test.label}}</span>: <span class="input">{{form.name_test}}</span></div>
+    <div class="form_label error mb-5">{{form.name_test.errors}}</div>
+    <div class="form_label mb-5"><span class="label">{{form.theme_test.label}}</span>: <span class="input">{{form.theme_test}}</span></div>
+    <div class="form_label mb-5"><span class="label">{{form.max_test_result.label}}</span>: <span class="input">{{form.max_test_result}}</span></div>
+
+    <div class="flex_space_between mb-5">
+        <button class=" btn btn-primary  mt-5 mb-3 login-button" type="submit">Зберегти зміни</button>
+        <a href="{% url 'create_task' test.slug %}" class="btn btn-primary login-button mt-5 mb-3 btn_block" >До конструктору</a>
+        <a class="btn btn-danger mt-5 mb-3 " href="{% url 'delete_test' test.slug %}"   onclick="return deleteTest()" style="letter-spacing:2px;" >Видалити</a>
+    </div>
+</form>
+
+
+{%endblock%}
+
+{%block script%}
+<script>
+    function deleteTest(){
+        const checkDeleteTest = confirm('Ви дійсно бажаєте видалити цей тест? Цю дію неможливо буде повернути!');
+        if (checkDeleteTest){
+            return true
+        }
+        return false
+
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+{%endblock%}
+
+
+

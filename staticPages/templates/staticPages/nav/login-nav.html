@@ -1,0 +1,39 @@
+{%load static%}
+<link rel="stylesheet" href="{%static 'staticPages/css/header/header.css'%}">
+<nav class="navbar navbar-light bg-light">
+          <div class="container-xxl">
+                <a class="navbar-brand "  href="{%url 'index_page'%}">
+                    <span class="big-logo">ReCode</span>
+                </a>
+                <ul class="nav">
+                      <li class="nav-item ">
+                        <a class="nav-link nav-element " href="{% url 'index_page'%}">Профіль</a>
+                      </li>
+                    <li class="nav-item ">
+                        <a class="nav-link nav-element " href="{% url 'all_course'%}">Курси</a>
+                      </li>
+                    {% if type == 'teacher'%}
+                     <li class="nav-item ">
+                        <a class="nav-link nav-element " href="{% url 'designer'%}">Конструктор</a>
+                      </li>
+
+
+                    {%endif%}
+                      <li class="nav-item">
+                        <a class="nav-link  nav-element " href="{% url 'about'%}">Про нас</a>
+                      </li>
+<!--                      <li class="nav-item">-->
+<!--                        <a class="nav-link  nav-element " href="{% url 'tips'%}">Підказки</a>-->
+<!--                      </li>-->
+<!--                      <li class="nav-item">-->
+<!--                        <a class="nav-link  nav-element " href="{% url 'faq'%}">FAQ</a>-->
+<!--                      </li>-->
+
+
+                </ul>
+<!--                <p class="user_status" >{{user.last_name}} |</p>-->
+                <a href="{%url 'logout'%}" class="btn btn-primary login-button" >Вийти</a>
+
+
+          </div>
+</nav>

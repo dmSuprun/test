@@ -1,0 +1,73 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/course_designer.css'%}">
+{%endblock%}
+
+
+
+{%block content%}
+    <div class="position">
+        <h1><span class="badge bg-primary mt-5 mb-5 position">Редагувати завдання № {{relatively_num}}</span></h1>
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p class="label">{{form.function.label}}</p>
+        <p>{{form.function}}</p>
+        <div id="error_block" class="form_errors task_position">{{form.function.errors}}</div>
+        <p class="label">{{form.question.label}}</p>
+        <p>{{form.question}}</p>
+        <div class="position">
+            <h1><span class="badge bg-primary mt-5 mb-5 position">Тесткейси</span></h1>
+        </div>
+        <div class="flex_space_between mb-5">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {%for case_num,testcase in testcases%}
+                        <li class="breadcrumb-item" style="font-size:18px;"><a href="{% url 'testcaseupdate' testcase.pk case_num %}">Тесткейс №{{case_num}}</a></li>
+                    {%endfor%}
+                </ol>
+            </nav>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <div class="flex_space_between mb-5">
+            <button class="btn btn-success " type="submit">Зберегти</button>
+            <a href="{% url 'create_task' test.slug %}" class="btn btn-primary login-button" >До конструктора</a>
+            <a href="{% url 'create_testcase' this_task_pk %}" class="btn btn-primary login-button" >Додати тесткейс</a>
+            <a class="btn btn-danger" style="letter-spacing:2px;" href="{% url 'delete_task' task.test.slug task.pk %}" onclick="return deleteTask()">Видалити</a>
+        </div>
+
+    </form>
+
+
+
+{%endblock%}
+
+
+
+{%block script%}
+<script>
+    function deleteTask(){
+        const taskCheck = confirm('Ви дійсно бажаєте видалити завдання до тесту? Цю дію неможливо буде повернути!')
+        if (taskCheck){
+            return true
+        }
+        return false
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+{%endblock%}
+
+
+

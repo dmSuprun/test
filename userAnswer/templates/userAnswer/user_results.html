@@ -1,0 +1,29 @@
+{% extends "userAnswer/answer_layout.html" %}
+{%load static%}
+{%block styles%}
+    <link rel="stylesheet" href="{% static 'userAnswer/css/answer.css' %}">
+{%endblock%}
+
+{%block content%}
+    <div class="container_center mt-5">
+        <div class="container_horisontal_center">
+            <h1><span class="  badge bg-primary">Тестування завершено!</span></h1>
+            <h3>Кількість балів: <span class="  badge bg-primary mt-5">{{user_point_num}} / {{all_point_num}}</span></h3>
+
+            {% if css_selector == 1 %}
+                <h3>Відсоток правильності: <span class=" badge bg-danger mt-2">{{success_percent}}%</span></h3>
+            {% elif css_selector == 2 %}
+                    <h3>Відсоток правильності: <span class=" badge bg-warning mt-2">{{success_percent}}%</span></h3>
+            {%else %}
+                <h3>Відсоток правильності: <span class=" badge bg-success mt-2">{{success_percent}}%</span></h3>
+            {%endif%}
+            <a href="{% url 'index_page'%}" class="btn btn-primary login-button" >На головну</a>
+
+
+        </div>
+    </div>
+
+
+
+
+{%endblock%}

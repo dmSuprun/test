@@ -1,0 +1,11 @@
+.flex__container{
+    display: flex;
+    flex-wrap:wrap;
+}
+.flex__container *{
+    margin: 8% 10px;
+}
+.logo{
+    position:relative;
+    left:40%;
+}
