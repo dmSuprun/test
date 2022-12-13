@@ -1,5 +1,7 @@
 {% extends "designer/designer_layout.html" %}
 {% load static %}
+{% load designer_tags %}
+
 
 {%block styles%}
     <link rel="stylesheet" href="{%static 'designer/css/course_designer.css'%}">
@@ -13,10 +15,88 @@
             <h1><span class="badge bg-primary mt-5 mb-5 ">Редагувати тесткейс № {{testcase_num}}</span></h1>
         </div>
 
+         <div id="no_arg_error" class="form_errors task_position" ></div>
+
+        <div class="argContainer mt-5 m-3">
+            <div id="allFuncArguments">
+                {% for arg in count_input_arg %}
+                    <div id="argument{{arg}}">
+                        <div class="typeFloatError" id="floatError_{{arg}}">
+
+                                {% check_float_type arg arguments %}
+
+                        </div>
+                        <div class="typeFloatError" id="lists_{{arg}}">
+                            {% check_list arg arguments %}
+
+                        </div>
+                        <div class="input-group  input-group-lg" style="width:auto;">
+                            <label class="input-group-text">Аргумент №{{arg}}</label>
+
+                            <select class="form-select" required=""   onchange="checkFloatType(this,{{arg}})" name="argumentConfig">
+                                {% show_options arg arguments %}
+                            </select>
+
+                        </div>
+                        <div class="flex_row">
+                            <div id="items_{{arg}}">
+                                {%show_item arg arguments%}
+                            </div>
+                        </div>
+                        <div id="types_list_{{arg}}" class="mt-3 mb-3 flex_row"></div>
+                    </div>
+
+
+                {%endfor%}
+
+
+            </div>
+        </div>
+
+        <div class="flex_row">
+            <div class="flex_container" id="delte_input_controls" >
+                <div class="addButton" onclick="addArgumentFunc()">Додати аргумент </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="outputContainer mt-5 m-3">
+            <div id="allOutputArguments">
+
+            </div>
+        </div>
+
+        <div class="flex_row">
+            <div class="flex_container" id="delte_output_controls" >
+                <div class="addButton" onclick="addOuptutValueFunc()">Додати результат </div>
+            </div>
+        </div>
+
+        <div id="validation_error" class="form_errors task_position" ></div>
+        <div class="outputContainer mt-5 m-5">
+            <div id="testcases">
+                <div id="testcases_wrapper">
+
+                </div>
+            </div>
+        </div>
+        <div class="flex_row">
+            <div class="flex_container" id="delete_case_controls" >
+                <div class="addButton" onclick="addTestCase()">Додати тесткейс </div>
+            </div>
+        </div>
+
+
         <div class="flex_space_between mb-5">
             <a class="btn btn-success" style="letter-spacing:2px;" href="#" onclick="">Зберегти зміни</a>
             <a class="btn btn-danger" style="letter-spacing:2px;" href="{% url 'delete_testcase'  testcase_pk %}" onclick="return checkDelete()">Видалити тесткейс</a>
         </div>
+
+
 
 
 

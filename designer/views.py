@@ -304,14 +304,16 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
     get_this_testcase = get_object_or_404(DataForTestingCode,pk=testcase_pk)
 
     # get input types
-    all_types_in_this_testcase = []
+    all_inp_types_in_this_testcase = []
     tmp_type=''
     for type_sym in (get_this_testcase.input_test_data_type+','):
         if type_sym != ',':
             tmp_type += type_sym
         else:
-            all_types_in_this_testcase.append(tmp_type)
+            all_inp_types_in_this_testcase.append(tmp_type)
             tmp_type=''
+
+
     # get input values
     all_values_in_this_testcase = []
     tmp_value = ''
@@ -321,10 +323,11 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
         else:
             all_values_in_this_testcase.append(tmp_value)
             tmp_value = ''
-
-
-
-
+    argument_types_and_he_num ={}
+    iter_num=0
+    for arg in all_inp_types_in_this_testcase:
+        iter_num+=1
+        argument_types_and_he_num[iter_num]=arg
 
 
 
@@ -334,7 +337,10 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
         'type':get_role(request),
         'testcase_num':case_number_in_designer_template,
         'title': f'Оновити тесткейс №{case_number_in_designer_template}',
-        'testcase_pk':testcase_pk
+        'testcase_pk':testcase_pk,
+        'count_input_arg':range(1,len(all_inp_types_in_this_testcase)+1,1),
+        'arguments':argument_types_and_he_num,
+
 
     }
 

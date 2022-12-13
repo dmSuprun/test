@@ -1,0 +1,12 @@
+{% load designer_tags %}
+
+{% for type in types %}
+    {% cut_type_value_from_difficult_data_type this_arg as arg_type_val%}
+
+    {% if arg_type_val == type %}
+        <option value="{{type}}" selected>{{type}}</option>
+    {% else %}
+        <option value="{{type}}" >{{type}}</option>
+    {% endif %}
+
+{%endfor%}

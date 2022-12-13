@@ -1,0 +1,22 @@
+{% if exist %}
+<div>
+    <div class="input-group m-3 input-group-lg" style="width:50vw;">
+        <label class="input-group-text">Тип елементів</label>
+        <select class="form-select" required="" onchange="checkFloatTypeInItems(this,{{arg_num}})" name="listItem1">
+            {% for type in types%}
+                {% if this_item == type %}
+                    <option value="{{type}}" selected>{{type}}</option>
+                {% else %}
+                    <option value="{{type}}" >{{type}}</option>
+                {% endif %}
+
+            {%endfor%}
+        </select>
+    </div>
+</div>
+
+
+
+{% else %}
+
+{% endif %}
