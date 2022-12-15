@@ -120,7 +120,7 @@
 
                     for(var j = 0; j < case_wrap.length; ++j){
                         if(j==1 ){
-                            var div_with_data = case_wrap[j].insertAdjacentHTML('beforeend','<input style="width:100%;" type="text" name="inp_value_'+i+'" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось" required="">')
+                            var div_with_data = case_wrap[j].insertAdjacentHTML('beforeend','<input style="width:100%;" type="text" name="inp_value" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось" required="">')
 
                         }
                     }
@@ -316,7 +316,7 @@
 
                     for(var j = 0; j < case_wrap.length; ++j){
                         if(j==2 ){
-                            var div_with_data = case_wrap[j].insertAdjacentHTML('beforeend','<input style="width:100%;" type="text" name="out_value_'+i+'" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось" required>')
+                            var div_with_data = case_wrap[j].insertAdjacentHTML('beforeend','<input style="width:100%;" type="text" name="out_value" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось" required>')
 
                         }
                     }
@@ -469,7 +469,7 @@
             }
 
             var caseText = '<div id="caseWrap_'+testcaseNum+'"><div class="flex_row mb-3"><h2><span class="badge bg-success">Новий тесткейс № '+testcaseNum+'</span></h2></div>'
-            var inputText ='<div id="inputs_testcase_'+testcaseNum+'"> <input style="width:100%;" type="number" name="price" min="1"  step="1" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded" placeholder="К-сть балів за успішне проходження тесткейсу"   required> <div class="flex_row "><h5 class="card-title">Вхідні значення</h5></div>'
+            var inputText ='<div id="inputs_testcase_'+testcaseNum+'"><div class="flex_row"><h5 class="card-title">К-сть балів за успішне проходження тесткейсу</h5></div><input style="width:100%;" type="number" name="price" min="1"  step="1" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded" placeholder="К-сть балів за успішне проходження тесткейсу"   required> <div class="flex_row "><h5 class="card-title">Вхідні значення</h5></div>'
             for(var i=0; i<countArgument;i++){
                 inputText += '<input style="width:100%;" type="text" name="inp_value" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " placeholder="Напишіть щось"   required>'
             }

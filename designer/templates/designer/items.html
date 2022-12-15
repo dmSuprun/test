@@ -1,22 +1,51 @@
-{% if exist %}
-<div>
-    <div class="input-group m-3 input-group-lg" style="width:50vw;">
-        <label class="input-group-text">Тип елементів</label>
-        <select class="form-select" required="" onchange="checkFloatTypeInItems(this,{{arg_num}})" name="listItem1">
-            {% for type in types%}
-                {% if this_item == type %}
-                    <option value="{{type}}" selected>{{type}}</option>
-                {% else %}
-                    <option value="{{type}}" >{{type}}</option>
-                {% endif %}
 
-            {%endfor%}
-        </select>
-    </div>
-</div>
+    {% if exist %}
+        {% if not isDict %}
+            <div>
+                <div class="input-group m-3 input-group-lg" style="width:50vw;">
+                    <label class="input-group-text">Тип елементів</label>
+                    <select class="form-select" required="" onchange="checkFloatTypeInItems(this,{{arg_num}})" name="listItem1">
+                        {% for type in types %}
+                            {% if this_item == type %}
+                                <option value="{{type}}" selected>{{type}}</option>
+                            {% else %}
+                                <option value="{{type}}" >{{type}}</option>
+                            {% endif %}
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+        {% else %}
+        <div>
+            <div class="flex_row">
+                <div class="input-group  input-group-lg m-3" style="width:25vw;">
+                    <label class="input-group-text">Ключ</label>
+                    <select class="form-select" required="" onchange="checkFloatTypeInItems(this,{{arg_num}})" id="dict" name="dictKey_{{arg_num}}">
+                        {% for type in types %}
+                            {% if this_key == type %}
+                                <option value="{{type}}" selected>{{type}}</option>
+                            {% else %}
+                                <option value="{{type}}" >{{type}}</option>
+                            {% endif %}
+                        {%endfor%}
+                    </select>
+                </div>
+                <div class="dictValue mb-3 ">:</div>
+                <div class="input-group m-3 input-group-lg" style="width:25vw;">
+                    <label class="input-group-text">Значення</label>
+                    <select class="form-select" required="" onchange="checkFloatTypeInItems(this,{{arg_num}})" id="dict" name="dictValue_{{arg_num}}">
+                        {% for type in types %}
+                            {% if this_val == type %}
+                                <option value="{{type}}" selected>{{type}}</option>
+                            {% else %}
+                                <option value="{{type}}" >{{type}}</option>
+                            {% endif %}
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+        </div>
+        {%endif%}
+    {% else %}
 
-
-
-{% else %}
-
-{% endif %}
+    {% endif %}

@@ -30,6 +30,8 @@ def cut_items_type(type_val):
 def show_options(this_argument_num,all_arguments):
     types= ('str', 'int', 'float', 'bool', 'list', 'tuple', 'set', 'frozenset', 'dict')
     get_this_arg_val=all_arguments[this_argument_num]
+
+
     return {'types':types,'this_arg':get_this_arg_val}
 
 
@@ -40,8 +42,13 @@ def show_item(this_argument_num,all_arguments):
 
     if cut_type_value_from_difficult_data_type(get_this_arg_val) == 'list' or cut_type_value_from_difficult_data_type(get_this_arg_val) == 'tuple' or cut_type_value_from_difficult_data_type(get_this_arg_val) == 'set' or cut_type_value_from_difficult_data_type(get_this_arg_val) == 'frozenset':
         this_item_type = cut_items_type(get_this_arg_val)
-        return {'types':types,'this_item':this_item_type, 'exist':True,'arg_num':this_argument_num}
+        return {'types':types,'this_item':this_item_type, 'exist':True,'arg_num':this_argument_num,'isDict':False}
+    elif  cut_type_value_from_difficult_data_type(get_this_arg_val) == 'dict':
+        this_item_dict_key=cut_items_type(get_this_arg_val)[:(cut_items_type(get_this_arg_val).index(':'))]
+        this_item_dict_val = cut_items_type(get_this_arg_val)[(cut_items_type(get_this_arg_val).index(':')+1):len(cut_items_type(get_this_arg_val))]
+        return {'types':types,'this_key':this_item_dict_key,'this_val':this_item_dict_val, 'exist':True,'arg_num':this_argument_num,'isDict':True}
     return {'exist':False}
+
 
 @register.inclusion_tag('designer/float_info.html')
 def check_float_type(this_argument_num,all_arguments):
@@ -63,6 +70,12 @@ def check_float_type(this_argument_num,all_arguments):
 
         else:
             return {'exist':False}
+    elif first_part_of_type == 'dict':
+        key_type=cut_items_type(get_this_arg_val)[:(cut_items_type(get_this_arg_val).index(':'))]
+        value_type =cut_items_type(get_this_arg_val)[(cut_items_type(get_this_arg_val).index(':')+1):len(cut_items_type(get_this_arg_val))]
+        if key_type or value_type:
+            return {'exist': True, 'error': 'Використання типу float призводить до неточності результатів тестування!'}
+
     else:
         return {'exist':False}
 

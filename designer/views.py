@@ -312,22 +312,73 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
         else:
             all_inp_types_in_this_testcase.append(tmp_type)
             tmp_type=''
+    argument_types_and_he_num = {}
+    iter_num = 0
+    for arg in all_inp_types_in_this_testcase:
+        iter_num += 1
+        argument_types_and_he_num[iter_num] = arg
+
+    # get output types
+
+    all_out_types_in_this_testcase = []
+    tmp_out_type = ''
+    for type_sym in (get_this_testcase.output_test_data_type + ','):
+        if type_sym != ',':
+            tmp_type += type_sym
+        else:
+            all_out_types_in_this_testcase.append(tmp_type)
+            tmp_type = ''
+    output_argument_types_and_he_num = {}
+    iter_num = 0
+    for arg in all_out_types_in_this_testcase:
+        iter_num += 1
+        output_argument_types_and_he_num[iter_num] = arg
+
 
 
     # get input values
-    all_values_in_this_testcase = []
+
+    all_input_values_in_this_testcase = []
     tmp_value = ''
     for val_sym in (get_this_testcase.input_test_data+','):
         if val_sym != ',':
             tmp_value += val_sym
         else:
-            all_values_in_this_testcase.append(tmp_value)
+            all_input_values_in_this_testcase.append(tmp_value)
             tmp_value = ''
-    argument_types_and_he_num ={}
+
+    input_values_and_he_num = {}
     iter_num=0
-    for arg in all_inp_types_in_this_testcase:
+    for value in all_input_values_in_this_testcase:
         iter_num+=1
-        argument_types_and_he_num[iter_num]=arg
+        input_values_and_he_num[iter_num]=value
+
+
+    # get output values
+
+    all_output_values_in_this_testcase = []
+    tmp_value = ''
+    for val_sym in (get_this_testcase.output_test_data + ','):
+        if val_sym != ',':
+            tmp_value += val_sym
+        else:
+            all_output_values_in_this_testcase.append(tmp_value)
+            tmp_value = ''
+
+    output_values_and_he_num = {}
+    iter_num = 0
+    for value in all_output_values_in_this_testcase:
+        iter_num += 1
+        output_values_and_he_num[iter_num] = value
+
+
+
+
+
+
+
+
+
 
 
 
@@ -339,7 +390,23 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
         'title': f'Оновити тесткейс №{case_number_in_designer_template}',
         'testcase_pk':testcase_pk,
         'count_input_arg':range(1,len(all_inp_types_in_this_testcase)+1,1),
+        'count_arg':len(all_inp_types_in_this_testcase),
         'arguments':argument_types_and_he_num,
+
+
+        'generate_out_arg':range(1, len(all_out_types_in_this_testcase)+1,1),
+        'count_output':len(all_out_types_in_this_testcase),
+        'outputs':output_argument_types_and_he_num,
+
+        'generate_input_values':range(1,len(all_input_values_in_this_testcase)+1,1 ),
+        'input_values':input_values_and_he_num,
+
+        'generate_output_values': range(1, len(all_output_values_in_this_testcase) + 1, 1),
+        'output_values': output_values_and_he_num,
+
+        'testcase_price':int(get_this_testcase.num_of_point//1)
+
+
 
 
     }
