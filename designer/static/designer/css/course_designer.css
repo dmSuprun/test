@@ -273,3 +273,7 @@
 
         }
 
+.task_position{
+    position:relative;
+    left:5%;
+}

@@ -17,7 +17,8 @@
         <div class="logo_flex">
             <h1><span class="badge bg-primary mt-5 mb-5 ">Редагувати тесткейс № {{testcase_num}}</span></h1>
         </div>
-        <form action="" id="addTask">
+        <form action="" id="addTask" method="post">
+            {% csrf_token %}
             <div id="no_arg_error" class="form_errors task_position" ></div>
             <div class="argContainer mt-5 m-3">
                 <div id="allFuncArguments">
@@ -410,11 +411,6 @@
 
 
 
-
-
-
-
-
         };
 
 
@@ -557,6 +553,7 @@
 
 
                 }
+
 
                 return true
             }

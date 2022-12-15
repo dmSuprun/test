@@ -302,6 +302,33 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
     if get_role(request) != 'teacher':
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
     get_this_testcase = get_object_or_404(DataForTestingCode,pk=testcase_pk)
+    if request.method == 'POST':
+        result_input_types = union_types(request.POST, 'argumentConfig', True)
+        result_output_types = union_types(request.POST, 'outputConfig', False)
+
+        count_testcase = len(request.POST.getlist('inp_value')) // len(request.POST.getlist('argumentConfig'))
+        count_argument = len(request.POST.getlist('argumentConfig'))
+        inp_values = request.POST.getlist('inp_value')
+        output_values = request.POST.getlist('out_value')
+        prices = request.POST.getlist('price')
+
+
+        for testcaseNumber in range(count_testcase):
+            index_from = testcaseNumber * count_argument
+            index_to = (index_from + count_argument)
+            get_this_testcase.input_test_data = ','.join(inp_values[index_from:index_to])
+            get_this_testcase.input_test_data_type = result_input_types
+            get_this_testcase.output_test_data=output_values[testcaseNumber]
+            get_this_testcase.output_test_data_type=result_output_types
+            get_this_testcase.num_of_point=prices[testcaseNumber]
+
+            get_this_testcase.save()
+            return redirect('/')
+
+
+
+
+
 
     # get input types
     all_inp_types_in_this_testcase = []
@@ -404,7 +431,7 @@ def update_testcase(request, testcase_pk,case_number_in_designer_template):
         'generate_output_values': range(1, len(all_output_values_in_this_testcase) + 1, 1),
         'output_values': output_values_and_he_num,
 
-        'testcase_price':int(get_this_testcase.num_of_point//1)
+        'testcase_price':int(get_this_testcase.num_of_point)
 
 
 

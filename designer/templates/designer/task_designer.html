@@ -25,12 +25,13 @@
         {% csrf_token %}
         <p class="label">{{form.function.label}}</p>
         <p>{{form.function}}</p>
-        <div id="error_block" class="form_errors task_position">{{form.function.errors}}</div>
+        <div id="error_block2" class="typeFloatError task_position"></div>
+        <div id="error_block" class="form_errors ">{{form.function.errors}}</div>
         <p class="label">{{form.question.label}}</p>
         <p>{{form.question}}</p>
 
 
-        <div id="no_arg_error" class="form_errors task_position" ></div>
+        <div id="no_arg_error" class="form_errors task_position typeFloatError" ></div>
 
         <div class="argContainer mt-5 m-3">
             <div id="allFuncArguments"></div>
@@ -46,7 +47,6 @@
 
 
 
-
         <div class="outputContainer mt-5 m-3">
             <div id="allOutputArguments"></div>
         </div>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div id="validation_error" class="form_errors task_position" ></div>
+        <div id="validation_error" class="form_errors task_position typeFloatError" ></div>
         <div class="outputContainer mt-5 m-5">
             <div id="testcases"><div id="testcases_wrapper"></div></div>
         </div>
@@ -494,6 +494,18 @@
             }
 
         }
+        function functionFieldValueValidation(value){
+            // do validation for functionFieldValue
+            const ValidSymb = ['1','2','3','4','5','6','7','8','9','0','a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J','k','K','L','l','m','M','N','n','o','O','p','P','q','Q','r','R','s','S','t','T','U','u','v','V','w','W','x','X','y','Y','z','Z','_']
+            for (var i in value){
+                if(ValidSymb.includes(value[i])){
+                    continue
+                }else{
+                    return [false, i]
+                }
+            }
+            return [true, 'ok']
+        };
 
         document.getElementById('addTask').onsubmit = function(){
             if (document.getElementById('allFuncArguments').hasChildNodes() && document.getElementById('allOutputArguments').hasChildNodes()){
@@ -528,10 +540,20 @@
 
 
                 }
+                const validationRes = functionFieldValueValidation(id_function.value)
+                if(validationRes[0]){
+                    error_block2.innerHTML = ''
+                    return true
 
-                return true
+                }else{
+                    error_block2.innerHTML = '<p>Функція має не коректний('+id_function.value[validationRes[1]]+') символ!</p>'
+                    return false
+
+                }
+
+
             }
-            no_arg_error.innerHTML = '<p>Необхідно додати аргументи!</p>'
+            no_arg_error.innerHTML = '<p>Необхідно додати вхідні та вихідні аргументи!</p>'
             return false
 
         };
@@ -545,34 +567,14 @@
 
 
 
-    function functionFieldValueValidation(value){
-        // do validation for functionFieldValue
-        const ValidSymb = ['1','2','3','4','5','6','7','8','9','0','a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J','k','K','L','l','m','M','N','n','o','O','p','P','q','Q','r','R','s','S','t','T','U','u','v','V','w','W','x','X','y','Y','z','Z','_']
-            for (var i in value){
-                if(ValidSymb.includes(value[i])){
-                    continue
-                }else{
-                    return false
-                }
-            }
-            return true
-        }
 
 
 
-    function functionFieldValueValidation(value){
-        // do validation for functionFieldValue
-        const ValidSymb = ['1','2','3','4','5','6','7','8','9','0','a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J','k','K','L','l','m','M','N','n','o','O','p','P','q','Q','r','R','s','S','t','T','U','u','v','V','w','W','x','X','y','Y','z','Z','_']
-            for (var i in value){
-                if(ValidSymb.includes(value[i])){
-                    continue
-                }else{
-                    return false
-                }
-            }
 
-            return true
-        }
+
+
+
+
 
 
 
