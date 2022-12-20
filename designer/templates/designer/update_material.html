@@ -1,0 +1,191 @@
+{% extends "designer/designer_layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/course_designer.css'%}">
+{%endblock%}
+
+{%block content%}
+    <div class="position">
+        <h1><span class="badge bg-primary mt-5 mb-5 position">Створити матеріал</span></h1>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form_label mb-5">
+            <span class="name_label">{{form.material_name.label}}</span>:{{form.material_name}} <span class="input"></span>
+        </div>
+        <div class="form_label mb-5">
+            <span class="name_label">{{form.key_words.label}}</span>:{{form.key_words}} <span class="input"></span>
+        </div>
+        <div class="form_label mb-5 none_class">
+            <span class="name_label">json</span>:{{form.material}} <span class="input"></span>
+
+        </div>
+        <div class="row form_label mb-5 ">
+            <span class="name_label">Створити матеріал:</span><div id="editorjs" class="shadow-lg p-3 mb-5 bg-body rounded mt-3"></div>
+        </div>
+        <div class="flex_row"><div class="flex_row"><button type="submit" class="btn btn-primary login-button" onclick="submit_material()">Оновити</button></div></div>
+
+
+
+    </form>
+
+
+
+
+
+{%endblock%}
+
+{%block script%}
+    <script src="{%static 'designer/js/editor.js' %}"></script>
+    <script src="{%static 'designer/js/marker.js' %}"></script>
+    <script src="{%static 'designer/js/header.js' %}"></script>
+    <script src="{%static 'designer/js/list.js' %}"></script>
+    <script src="{%static 'designer/js/check_list.js' %}"></script>
+    <script src="{%static 'designer/js/quote.js' %}"></script>
+    <script src="{%static 'designer/js/underline.js' %}"></script>
+    <script src="{%static 'designer/js/code.js' %}"></script>
+    <script src="{%static 'designer/js/footnotes.js' %}"></script>
+    <script src="{%static 'designer/js/warning.js' %}"></script>
+    <script>
+      const editor = new EditorJS({
+        placeholder: 'Створіть свій матеріал тут!',
+        readOnly:false,
+        holder:'editorjs',
+        autofocus: false,
+        i18n: {
+            messages: {
+                ui: {
+                    "blockTunes": {
+                          "toggler": {
+                            "Click to tune": "Нажмите, чтобы настроить",
+                            "or drag to move": "или перетащите",
+
+                          },
+                    },
+                    "inlineToolbar": {
+                      "converter": {
+                        "Convert to": "Конвертировать в"
+                      }
+                    },
+                    "toolbar": {
+                      "toolbox": {
+                        "Add": "Добавить"
+                      }
+                    },
+
+
+
+                },
+                toolNames: {
+                    "Text": "Параграф",
+                    "Heading": "Заголовок",
+                    "List": "Список",
+                    "Warning": "Примітка",
+                    "Checklist": "Чеклист",
+                    "Quote": "Цитата",
+                    "Code": "Код",
+                    "Marker":"Маркер",
+                    "Link": "Посилання",
+                    "Marker": "Маркер",
+                    "Bold": "Напівжирний",
+                    "Italic": "Курсив",
+                    "Underline":"Підкреслений",
+
+                },
+                tools: {
+                    // Section for passing translations to the external tools classes
+                    // The first-level keys of this object should be equal of keys ot the 'tools' property of EditorConfig
+                },
+                blockTunes: {
+                    "delete": {
+                        "Delete": "Удалить"
+                    },
+                    "moveUp": {
+                      "Move up": "Переместить вверх"
+                    },
+                    "footnotes": {
+                      "Footnote": "Виноска",
+
+                    },
+                    "moveDown": {
+                      "Move down": "Переместить вниз"
+                    }
+                },
+            }
+        },
+
+        tools: {
+          quote: {
+            class:Quote,
+            shortcut: 'SHIFT+Q'
+          },
+          underline: Underline,
+          header: {
+            class: Header,
+            inlineToolbar: ['link'],
+            shortcut: 'SHIFT+H'
+
+          },
+          list: {
+            class: List,
+            inlineToolbar: true ,
+            tunes: ['footnotes'],
+             shortcut: 'SHIFT+L'
+          },
+          checklist: {
+            class: Checklist,
+            inlineToolbar: true,
+            shortcut: 'SHIFT+K'
+          },
+          paragraph: {
+            tunes: ['footnotes'],
+            shortcut: 'SHIFT+P'
+          },
+          code: {
+            class:CodeTool,
+            shortcut: 'SHIFT+C'
+          },
+          warning: {
+            class: Warning,
+            inlineToolbar: true,
+            shortcut: 'SHIFT+W',
+            config: {
+              titlePlaceholder: 'Title',
+              messagePlaceholder: 'Message',
+            },
+          },
+          Marker: {
+            class: Marker,
+            shortcut: 'SHIFT+M',
+          },
+          footnotes: {
+            class: FootnotesTune,
+          },
+
+
+
+
+
+        },
+        data: {% autoescape off %} {{material_data}} {% endautoescape %}
+
+      });
+      function submit_material(){
+        editor.save().then((outputData) => {
+          var res = JSON.stringify(outputData)
+          id_material.value = res
+
+          return true
+
+        }).catch((error) => {
+          return false
+        });
+      }
+
+
+
+  </script>
+
+{%endblock%}
+

@@ -39,6 +39,40 @@
 
 
     </div>
+    <hr>
+<div class="flex">
+        {% if count_material == 0 %}
+            <h1><span class="badge bg-primary mt-5 mb-3 position">Ви ще не створили матеріали!</span></h1>
+        {%else%}
+            <h1><span class="badge bg-primary mt-5 mb-3 position">Мої матеріали</span></h1>
+        {% endif %}
+    </div>
+
+    <div class="flex">
+        {% if count_material == 0 %}
+            <a href="{% url 'index_page'  %}" class="btn btn-primary login-button m-3">На головну</a>
+            <a href="{% url 'create_material' %}" class="btn btn-success success_btn m-3">Створити матеріал</a>
+
+        {% else %}
+            {%for material in materials %}
+
+                <div class="card text-center text-bg-light" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Тема: {{material.material_name}}</h5>
+                        <p class="card-text">Ключові слова: {{material.key_words}}</p>
+
+                        <a href="{% url 'update_material' material.material_uuid  %}" class="btn btn-warning">Редагувати</a>
+
+                    </div>
+                </div>
+
+
+            {%endfor%}
+        {% endif %}
+
+
+    </div>
+
 
 
 

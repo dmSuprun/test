@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'Users',
     'userAnswer',
     'designer',
-    'statistic'
+    'statistic',
+    'ScientificMaterials.apps.ScientificmaterialsConfig'
 ]
 
 MIDDLEWARE = [
@@ -144,9 +145,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '434532287440-ujtai9vmggv2oq7tn77lhrlp45h6i6a3.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '434532287440-o92cf38788hqa8kmorcvacl9fo861c6b.apps.googleusercontent.com'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 LOGOUT_REDIRECT_URL='/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/authorization/login/google-oauth2/'

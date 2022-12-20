@@ -1,6 +1,7 @@
+import json
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from course.models import CourseConfig
 from course.forms import CreateCourseTextForm, CreateCourseForm, TeacherInCourseForm
@@ -10,6 +11,8 @@ from .forms import TestCreateForm,CreateTest,TaskCreationForm,CreateTaskInModelF
 from tests.models import TestsSection, TestsConfig, DataForTestingCode
 from django.urls import reverse, reverse_lazy
 from .forms import DataForTestingCodeForm
+from ScientificMaterials.forms import createMaterialForm, createMaterialText
+from ScientificMaterials.material_services.crud import read_materials, read_only_one_material
 
 def union_types(list_tmp,key_list,input_field):
 
@@ -585,15 +588,91 @@ def create_tasks_to_test(request,test_slug):
     }
     return render(request, 'designer/task_designer.html', context=context)
 
+
+
+
+@login_required
+def create_materials(request):
+    if get_role(request) != 'teacher':
+        return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
+    if request.method == 'POST':
+        form = createMaterialText(request.POST)
+        if form.is_valid():
+            data_for_model_form ={
+                'material_name':form.cleaned_data['material_name'],
+                'key_words':form.cleaned_data['key_words'],
+                'material':form.cleaned_data['material'],
+                'author':request.user
+            }
+            model_form = createMaterialForm(data_for_model_form)
+            if model_form.is_valid():
+                model_form.save()
+                return redirect(reverse('show_all_tests'))
+    else:
+        form=createMaterialText()
+
+    context={
+        'type':get_role(request),
+        'form':form,
+        'title':'Створити науковий матеріал'
+    }
+    return render(request, 'designer/create_material.html', context=context)
+
+
 @login_required
 def show_all_tests(request):
     if get_role(request) != 'teacher':
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
     get_my_tests = TestsConfig.objects.filter(author_of_test__username=request.user.username)
+    get_materials = read_materials(author=request.user)
     context={
         'type':get_role(request),
-        'title':'Мої тести',
+        'title':'Мої розробки',
         'my_tests':get_my_tests,
-        'count_test':len(get_my_tests)
+        'count_test':len(get_my_tests),
+        'count_material': len(get_materials),
+        'materials': get_materials
+
     }
-    return render(request, 'designer/show_all_tests.html', context=context)
+    return render(request, 'designer/show_all_tests_and_materials.html', context=context)
+
+
+def update_material(request,uuid_material):
+    if get_role(request) != 'teacher':
+        return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
+    get_material = read_only_one_material(material_uuid=uuid_material)
+    if request.method == 'POST':
+        form = createMaterialText(request.POST)
+        if form.is_valid():
+            get_material.material_name = form.cleaned_data['material_name']
+            get_material.key_words = form.cleaned_data['key_words']
+            get_material.material = form.cleaned_data['material']
+            get_material.save()
+            return redirect(reverse('show_all_tests'))
+
+
+    form = createMaterialText(
+        {
+            'material_name':get_material.material_name,
+            'key_words': get_material.key_words,
+            'material':get_material.material
+
+        }
+    )
+
+
+
+
+    context={
+        'type':get_role(request),
+        'material_data':get_material.material,
+        'form':form
+    }
+    return render(request, 'designer/update_material.html', context=context)
+
+
+
+
+
+
+

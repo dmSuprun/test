@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from designer.utils import transliteration
 from django.db import transaction
+from ScientificMaterials.material_services.crud import read_only_one_material,read_materials
 
 
 @login_required
@@ -100,10 +101,11 @@ def show_detail_course(request, course_slug):
         try:
             get_user=User.objects.get(email=teacher.e_mail)
 
-            tmp=f'{get_user.first_name} {get_user.last_name} '
+            tmp=f'{get_user.first_name} {get_user.last_name}, '
         except:
-            tmp=f'Не автентифікований({teacher.e_mail})'
+            tmp=f'Не автентифікований({teacher.e_mail}),'
         teachers_result[teacher.e_mail] = tmp
+
 
 
 
@@ -635,3 +637,8 @@ def update_course_subject(request, course_slug):
 
     else:
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Неможливо оновити дані про курс!</h1>',status=405)
+
+
+
+def show_detail_material(request, material_id):
+    this_material = read_only_one_material(material_uuid=material_id)

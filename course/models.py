@@ -29,4 +29,16 @@ class AssignedTest(models.Model):
         return f'Назначеня для курсу {self.course}'
 
 
+class AssignedMaterial(models.Model):
+    course=models.ForeignKey(CourseConfig, on_delete=models.CASCADE)
+    material=models.ForeignKey('ScientificMaterials.ScientificMaterials',on_delete=models.CASCADE)
+    assigned_material_date = models.DateField('Дата призначення', auto_now_add=True)
+
+
+    class Meta:
+        ordering = ['-pk']
+    def __str__(self):
+        return f'Матеріал для курсу - {self.course}'
+
+
 

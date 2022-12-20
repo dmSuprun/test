@@ -6,6 +6,12 @@ from course.models import AssignedTest
 from userAnswer.models import UserWhoСompletedTest
 from tests.models import TestsConfig
 
+
+def check_teacher(email):
+    if len(TeacherInCourse.objects.filter(e_mail=email))==0:
+        return False
+    return True
+
 def get_test_by_slug(slug):
     return get_object_or_404(TestsConfig, slug=slug)
 
@@ -95,8 +101,11 @@ def average_mark_in_course(course_slug):
 
 
     for complete_test in completed_tests:
-        TOTAL_MARK+=complete_test.user_point
-        MARK_NUMBER+=1
+        if not check_teacher(complete_test.user.email):
+            TOTAL_MARK+=complete_test.user_point
+            MARK_NUMBER+=1
+        else:
+            continue
 
     try:
         AVERAGE = round(TOTAL_MARK/MARK_NUMBER, 2)
