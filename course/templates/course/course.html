@@ -93,11 +93,23 @@
                 <div class="card_with_test">
                     <div class="card text-center card_with_test__item ">
                         <div class="card-header header_flex">
-                            Додано тест до курсу!
+
+                            <span class=" text-muted">
+                                {% for user_email,complete_test in student_completed_tests%}
+                                    {%for test_result in complete_test%}
+                                        {%if assign_test.test == test_result.test and user_email == request.user.email %}
+                                            &#9989;
+                                        {%endif%}
+                                    {%endfor%}
+                                {%endfor%}
+                                Тест додано до курсу!
+                            </span>
                              {% if type == 'teacher' %}
+
                                  <a href="{% url 'delete_assign_test'  post.course_slug  assign_test.test.slug %}" onclick="return deleteAssignTest()" class=" btn-close close_style2"></a>
 
                             {%endif%}
+
 
 
                         </div>
@@ -113,14 +125,21 @@
                         {%endif%}
                         {% if type == 'teacher' %}
                             {% if assign_test.test in this_teacher_assign_test %}
-                            <a href="{% url 'create_task'  assign_test.test.slug %}" class="btn btn-primary users__button  ">Редагувати</a>
+                                <a href="{% url 'create_task'  assign_test.test.slug %}" class="btn btn-primary users__button  ">Редагувати</a>
+                                <a href="{% url 'assign_material'%}" class="btn btn-primary users__button  ">Додати матеріал</a>
+
                             {% endif %}
-                            <a href="{% url 'read_result' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Результати</a>
+                            <a href="{% url 'read_result' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button  ">Результати</a>
+
 
 
                         {%endif%}
 
                         <a href="{% url 'starttest' post.course_slug assign_test.test.slug %}" class="btn btn-primary users__button">Тестуватись</a>
+
+
+
+
                         {% for user_email,complete_test in student_completed_tests%}
                             {%for test_result in complete_test%}
                                 {%if assign_test.test == test_result.test and user_email == request.user.email %}
@@ -128,6 +147,27 @@
                                 {%endif%}
                             {%endfor%}
                         {%endfor%}
+                        {% if count_materials != 0 %}
+                            <p class="mt-3">
+                              <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#materials" aria-expanded="false" aria-controls="collapseExample">
+                                Переглянути матеріали цього тесту
+                              </button>
+                            </p>
+                            <div class="collapse" id="materials">
+                              <div class="card card-body">
+                                  {% for assign_material, test in materials %}
+                                    {% if test == assign_test.test %}
+                                        <a class="btn btn-primary mb-3"  href="{% url 'detail_material' assign_material.material.material_uuid %}" role="button">{{assign_material.material.material_name}}</a>
+
+                                    {% endif %}
+                                  {%endfor%}
+
+
+                              </div>
+                            </div>
+                        {%else%}
+
+                        {% endif %}
                     </div>
               <div class="card-footer text-muted">
                 {{assign_test.assigned_date}}

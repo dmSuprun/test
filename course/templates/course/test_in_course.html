@@ -1,0 +1,39 @@
+<div class="card_with_test">
+    <div class="card text-center card_with_test__item ">
+        <div class="card-header header_flex">
+            Додано тест до курсу!
+            {% if type == 'teacher' %}
+                <a href="{% url 'delete_assign_test'  course_slug  assign_test.test.slug %}" onclick="return deleteAssignTest()" class=" btn-close close_style2"></a>
+            {%endif%}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{assign_test.test.name_test}} </h5>
+            <p class="card-text">Автор: {{assign_test.test.author_of_test.first_name}} {{assign_test.test.author_of_test.last_name}}</p>
+            <p class="card-text">Тема тесту: {{assign_test.test.theme_test}}</p>
+            <p class="card-text">Максимальний бал: {{assign_test.test.max_test_result}}</p>
+            {%if assign_test.test.time_on_test == None %}
+                <p class="card-text">Час проходження: без обмежень</p>
+            {%else%}
+                <p class="card-text">Час проходження: {{assign_test.test.time_on_test}}хв</p>
+            {%endif%}
+            {% if type == 'teacher' %}
+                {% if assign_test.test in this_teacher_assign_test %}
+                    <a href="{% url 'create_task'  assign_test.test.slug %}" class="btn btn-primary users__button  ">Редагувати</a>
+                {% endif %}
+                <a href="{% url 'read_result' assign_test.test.slug course_slug %}" class="btn btn-primary users__button m-3 ">Результати</a>
+            {%endif%}
+            <a href="{% url 'starttest' course_slug assign_test.test.slug %}" class="btn btn-primary users__button">Тестуватись</a>
+            {% for user_email,complete_test in student_completed_tests%}
+                {%for test_result in complete_test%}
+                    {%if assign_test.test == test_result.test and user_email == request.user.email %}
+                        <a href="{% url 'read_detail_result' assign_test.test.slug course_slug request.user.username%}" class="btn btn-primary users__button m-3 ">Мій результат </a>
+                    {%endif%}
+                {%endfor%}
+            {%endfor%}
+        </div>
+        <div class="card-footer text-muted">
+            {{assign_test.assigned_date}}
+        </div>
+    </div>
+</div>
+

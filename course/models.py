@@ -31,6 +31,7 @@ class AssignedTest(models.Model):
 
 class AssignedMaterial(models.Model):
     course=models.ForeignKey(CourseConfig, on_delete=models.CASCADE)
+    test = models.ForeignKey(TestsConfig,on_delete=models.CASCADE)
     material=models.ForeignKey('ScientificMaterials.ScientificMaterials',on_delete=models.CASCADE)
     assigned_material_date = models.DateField('Дата призначення', auto_now_add=True)
 

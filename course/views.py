@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from designer.utils import transliteration
 from django.db import transaction
 from ScientificMaterials.material_services.crud import read_only_one_material,read_materials
+from .models import AssignedMaterial
 
 
 @login_required
@@ -129,8 +130,20 @@ def show_detail_course(request, course_slug):
 
     num_students=len(students.values())
     num_teachers=len(teachers_result)
-    ''' get tests'''
+    ''' get tests and materials'''
     tests=AssignedTest.objects.filter(course=post)
+
+    materials = AssignedMaterial.objects.filter(course=post)
+    materials_and_test = {}
+
+    for material in materials:
+        materials_and_test[material] = material.test
+
+
+
+
+
+
 
 
 
@@ -146,7 +159,9 @@ def show_detail_course(request, course_slug):
         'num_teachers':num_teachers,
         'tests':tests,
         'student_completed_tests':completed_tests.items(),
-        'this_teacher_assign_test':[i.test for i in AssignedTest.objects.filter(course__course_slug=course_slug, test__author_of_test=request.user)]
+        'this_teacher_assign_test':[i.test for i in AssignedTest.objects.filter(course__course_slug=course_slug, test__author_of_test=request.user)],
+        'count_materials':len(materials_and_test),
+        'materials':materials_and_test.items()
     }
     return render(request, 'course/course.html', context=context)
 
