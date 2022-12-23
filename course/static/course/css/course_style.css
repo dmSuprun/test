@@ -77,6 +77,11 @@
     flex-wrap:wrap;
 
 }
+.close3{
+    margin-left:3%;
+    position:relative;
+    top:3%;
+}
 
 
 .nav-element,
@@ -133,4 +138,30 @@
     align-items: center;
     flex-wrap:wrap;
 
+}
+
+.materials{
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    align-items: center;
+
+}
+.btn_material {
+    flex-basis: 80%;
+
+}
+.btn_material a{
+    width:100%;
+
+}
+.btn_close_material{
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    align-items: center;
+
+}
+.btn_close_material a{
+    margin-left:30px;
 }

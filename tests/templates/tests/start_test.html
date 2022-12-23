@@ -23,7 +23,7 @@
                                     <button type="submit" class="btn btn-primary sand">Відправити</button>
 
                                     {% if end_test %}
-                                        <a class="btn btn-danger end__test" href="/check/{{course}}/{{test}}/complete" >Завершити</a>
+                                        <a class="btn btn-danger end__test" onclick=" return sand_test()" href="/check/{{course}}/{{test}}/complete" >Завершити</a>
                                     {% endif %}
                                 </div>
 
@@ -87,3 +87,17 @@
 
 
 {%endblock%}
+{%block scripts%}
+<script>
+    function sand_test(){
+        var check = confirm('Ви дійсно бажаєте відправити?')
+        if (check){
+            return true
+        }
+        return false
+    };
+
+</script>
+{%endblock%}
+
+

@@ -374,6 +374,7 @@ def assign_test_on_course(request,course_slug):
         'tests':test_queryset,
         'course':this_course,
         'errors':assign_error,
+        'title':'Призначити тест',
         'test_who_assign_now':request.GET.get('test')
 
     }
@@ -417,7 +418,10 @@ def test_result(request, test, course):
 
     this_test = TestsConfig.objects.get(slug=test)
     this_course = CourseConfig.objects.get(course_slug=course)
-    all_answers_on_this_test = UserAnswer.objects.filter(test=this_test,course=this_course)
+    get_teachers_on_this_course = TeacherInCourse.objects.filter(course=this_course)
+    teachers_emails=[i.e_mail for i in get_teachers_on_this_course]
+    answers_with_teachers = UserAnswer.objects.filter(test=this_test, course=this_course)
+    all_answers_on_this_test = [i for i in answers_with_teachers if not  i.user.email in teachers_emails ]
     all_tasks = TestsSection.objects.filter(test=this_test)
 
     task_rating ={}
@@ -565,6 +569,7 @@ def delete_assign_test(request, course_slug, test_slug):
 
     return redirect(reverse('detail_course', kwargs={'course_slug':course_slug}))
 
+@login_required
 def delete_test_result(request, test_slug, course_slug, username):
     if get_role(request) != 'teacher':
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
@@ -582,6 +587,7 @@ def delete_test_result(request, test_slug, course_slug, username):
     checkin_result_obj.delete()
     return redirect(reverse('read_result', kwargs={'test':test_slug, 'course':course_slug}))
 
+@login_required
 def delete_student_from_course(request, student_email, course_slug):
     if get_role(request) != 'teacher':
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
@@ -589,7 +595,7 @@ def delete_student_from_course(request, student_email, course_slug):
     get_student = get_object_or_404(StudentInCourse, course__course_slug=course_slug, e_mail=student_email).delete()
     return redirect(reverse('detail_course',kwargs={'course_slug':course_slug}))
 
-
+@login_required
 def delete_teacher_from_course(request, teacher_email, course_slug):
     if get_role(request) != 'teacher':
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
@@ -655,5 +661,3 @@ def update_course_subject(request, course_slug):
 
 
 
-def show_detail_material(request, material_id):
-    this_material = read_only_one_material(material_uuid=material_id)

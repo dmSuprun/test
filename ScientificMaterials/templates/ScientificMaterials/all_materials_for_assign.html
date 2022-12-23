@@ -9,18 +9,28 @@
         <div class="flex_logo">
             <h1><span class="badge bg-primary m-5">Всі матеріали</span></h1>
         </div>
+        {% if errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Помилка!</strong> Матеріал "{{already_assign_material}}" вже призначено!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+            </div>
+        {% endif %}
         {% for material in materials %}
         <div class="flex_logo">
             <div class="card w-50 mb-3">
 
                   <div class="card-body">
-                    <div class="flex_logo"><h5 class="card-title">{{material.material_name}}</h5></div>
-                    <div class="flex_logo"><p class="card-text">{{material.key_words}}</p></div>
-                    <div class="flex_logo"><a href="#" class="btn btn-primary">Призначити</a></div>
+                    <div class="flex_logo"><h5 class="card-title"><span style="font-weight:bold;">Назва:</span> {{material.material_name}}</h5></div>
+                    <div class="flex_logo"><p class="card-text"><span style="font-weight:bold;">Ключові слова:</span> {{material.key_words}}</p></div>
+                    <div class="flex_logo"><p class="card-text"><span style="font-weight:bold;">Автор:</span> {{material.author.first_name}} {{material.author.last_name}}</p></div>
+
+                    <div class="flex_logo mt-3"><a href="{% url 'assign_material' material.material_uuid test_slug course_slug  %}" class="btn btn-success">Призначити</a></div>
                   </div>
             </div>
         </div>
         {% endfor %}
+
+
 
 
 

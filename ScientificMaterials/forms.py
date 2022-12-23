@@ -1,5 +1,6 @@
 from django.forms import ModelForm, TextInput, JSONField
 from django.core.exceptions import ValidationError
+from course.models import AssignedMaterial
 from django import forms
 from .models import *
 
@@ -18,5 +19,18 @@ class createMaterialForm(ModelForm):
     class Meta:
         model=ScientificMaterials
         fields='__all__'
+
+
+class AssignMaterialForm(ModelForm):
+    class Meta:
+        model=AssignedMaterial
+        fields='__all__'
+
+    def clean(self):
+        data = self.cleaned_data
+        if len(AssignedMaterial.objects.filter(course=data['course'], test=data['test'], material=data['material'])) >= 1:
+
+            raise ValidationError('Вже призначено')
+
 
 

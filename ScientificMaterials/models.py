@@ -9,4 +9,6 @@ class ScientificMaterials(models.Model):
     key_words = models.CharField('Ключові поняття', max_length=255)
     material = models.TextField('Матеріал')
     author = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='Автор матеріалу')
+    class Meta:
+        ordering = ['pk']
 

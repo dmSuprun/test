@@ -28,18 +28,18 @@
                 <th width="35%">Курс</th>
 
                 <th width="15%">Результат(в балах)</th>
-                <th width="15%">Коофіцієнт правильності</th>
+                <th width="15%">Відсоток правильності</th>
             </tr>
                 <tbody class="table_body">
-                    {% for result_obj in results_qrst %}
-                        <tr>
-                            <td>{{result_obj.test.name_test}}</td>
-                            <td>{{result_obj.course}}</td>
 
-                            <td>{{result_obj.user_point}} \ {{result_obj.test.max_test_result}}</td>
-                            <td>{{result_obj.success_percent}}</td>
+                        <tr>
+                            <td>{{results_qrst.test.name_test}}</td>
+                            <td>{{results_qrst.course}}</td>
+
+                            <td>{{results_qrst.user_point}} / {{results_qrst.test.max_test_result}}</td>
+                            <td>{{percent_success}}</td>
                         </tr>
-                    {% endfor %}
+
 
 
                 </tbody>

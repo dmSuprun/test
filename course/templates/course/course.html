@@ -125,17 +125,17 @@
                         {%endif%}
                         {% if type == 'teacher' %}
                             {% if assign_test.test in this_teacher_assign_test %}
-                                <a href="{% url 'create_task'  assign_test.test.slug %}" class="btn btn-primary users__button  ">Редагувати</a>
-                                <a href="{% url 'assign_material'%}" class="btn btn-primary users__button  ">Додати матеріал</a>
+                                <a href="{% url 'create_task'  assign_test.test.slug %}" class="btn btn-primary users__button m-3 ">Редагувати</a>
+                                <a href="{% url 'all_material_for_assign' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Додати матеріал</a>
 
                             {% endif %}
-                            <a href="{% url 'read_result' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button  ">Результати</a>
+                            <a href="{% url 'read_result' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Результати</a>
 
 
 
                         {%endif%}
 
-                        <a href="{% url 'starttest' post.course_slug assign_test.test.slug %}" class="btn btn-primary users__button">Тестуватись</a>
+                        <a href="{% url 'starttest' post.course_slug assign_test.test.slug %}" class="btn btn-primary users__button m-3">Тестуватись</a>
 
 
 
@@ -157,7 +157,17 @@
                               <div class="card card-body">
                                   {% for assign_material, test in materials %}
                                     {% if test == assign_test.test %}
-                                        <a class="btn btn-primary mb-3"  href="{% url 'detail_material' assign_material.material.material_uuid %}" role="button">{{assign_material.material.material_name}}</a>
+                                            {% if type == 'teacher' %}
+                                                <div class="materials">
+                                                    <div class="btn_material">
+                                                        <a class="btn btn-primary users__button mb-3"  href="{% url 'detail_material' assign_material.material.material_uuid %}" role="button">{{assign_material.material.material_name}}</a>
+                                                    </div>
+                                                    <div class="btn_close_material mb-3"><a class="btn-close" href="{% url 'delete_assign_material' assign_material.material.material_uuid test.slug post.course_slug %}"></a></div>
+
+                                                </div>
+                                            {% else %}
+                                                <a class="btn btn-primary users__button mb-3"  href="{% url 'detail_material' assign_material.material.material_uuid %}" role="button">{{assign_material.material.material_name}}</a>
+                                            {% endif %}
 
                                     {% endif %}
                                   {%endfor%}

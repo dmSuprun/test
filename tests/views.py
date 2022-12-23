@@ -101,7 +101,8 @@ def start_test(request,course_slug,test_slug):
     elif len(check_complete_for_this_user) !=0:
 
             ''' заборона проходження'''
-            user_result_on_this_test = UserWhoСompletedTest.objects.filter(course=this_request_course,test=this_request_test, user=request.user)
+
+            user_result_on_this_test = get_object_or_404(UserWhoСompletedTest,course=this_request_course,test=this_request_test, user=request.user)
 
             context={
                 'course':this_request_course.course_slug,
@@ -109,6 +110,7 @@ def start_test(request,course_slug,test_slug):
                 'this_test':this_request_test,
                 'title':f'{this_request_test.name_test}',
                 'results_qrst':user_result_on_this_test,
+                'percent_success':int(user_result_on_this_test.success_percent)*100,
                 'type': get_role(request)
 
             }
