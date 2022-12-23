@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 
 class UserAnswerTextForm(forms.Form):
-    answer=forms.CharField(widget=forms.Textarea(attrs={'class':'form-control shadow-lg p-3 mb-5 bg-white rounded', }), label='Відповідь')
+    answer=forms.CharField(widget=forms.Textarea(attrs={'class':'form-control shadow-lg p-3 mb-5 bg-white rounded', }), label='Відповідь',required=False)
     def clean_answer(self):
         get_string_answer = self.cleaned_data['answer']
         safe_list = ['datetime','math','random','string']

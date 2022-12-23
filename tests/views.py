@@ -26,9 +26,11 @@ def start_test(request,course_slug,test_slug):
 
     ''' get test section on this page obj'''
     section_obj = paginator.get_page(page.number)
+
     test__section = None
     for i in section_obj:
         test__section = i
+
 
     if len(check_complete_for_this_user) == 0:
         ''' логіка першого проходження '''
@@ -50,10 +52,13 @@ def start_test(request,course_slug,test_slug):
         page_and_answer={}
         ''' form logic '''
         if request.method == 'POST':
+            data_get = {'answer': ''}
+
             form = UserAnswerTextForm(request.POST)
             if form.is_valid():
 
                 answer_for_this_task = form.cleaned_data['answer']
+
 
                 data_for_form = {
                     'user': request.user,
@@ -66,21 +71,28 @@ def start_test(request,course_slug,test_slug):
                 add_result_form = UserAnswerForm(data_for_form)
                 if add_result_form.is_valid():
                     add_result_form.save()
+                    data_get = {'answer': answer_for_this_task}
                 else:
                     upd_obj = UserAnswer.objects.get(user=request.user, test=this_request_test,
                                                      course=this_request_course, test_section=test__section)
                     upd_obj.answer = answer_for_this_task
                     upd_obj.save()
+                    data_get = {'answer': answer_for_this_task}
+
+
         else:
             if test__section in section_and_she_answer.keys():
                 data_get = {'answer': section_and_she_answer[test__section]}
                 form = UserAnswerTextForm(data_get)
             else:
+                data_get={'answer':''}
                 form = UserAnswerTextForm()
 
         end_test = False
         if len(UserAnswer.objects.filter(user=request.user, test=this_request_test, course=this_request_course)) == len(tasks_for_this_test):
             end_test = True
+
+
         context = {
             'this_page':page,
             'task_len':task_len,
@@ -90,7 +102,8 @@ def start_test(request,course_slug,test_slug):
             'title':f'{this_request_test.name_test}',
             'course':this_request_course.course_slug,
             'test':this_request_test.slug,
-            'type':get_role(request)
+            'type':get_role(request),
+            'answer':data_get['answer']
 
 
         }
