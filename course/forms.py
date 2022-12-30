@@ -114,5 +114,11 @@ class AssignTestForm(ModelForm):
             raise ValidationError('Вже призначено!')
         return self.cleaned_data
 
+class addCommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
 
 

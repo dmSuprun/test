@@ -110,7 +110,8 @@ def create_test(request):
                 'slug':new_slug,
                 'theme_test':form.cleaned_data['theme_test'],
                 'author_of_test':request.user,
-                'max_test_result':form.cleaned_data['max_test_result']
+                'max_test_result':form.cleaned_data['max_test_result'],
+                'create_func_template':form.cleaned_data['create_func_template']
 
             }
 
@@ -144,13 +145,17 @@ def update_test(request, test_slug):
 
             get_test.name_test = form.cleaned_data['name_test']
             get_test.theme_test = form.cleaned_data['theme_test']
+            get_test.max_test_result = form.cleaned_data['max_test_result']
+            get_test.create_func_template = form.cleaned_data['create_func_template']
             get_test.save()
             return redirect(reverse('create_task', kwargs={'test_slug':get_test.slug}))
     else:
         data_for_form = {
             'name_test':get_test.name_test,
             'theme_test':get_test.theme_test,
-            'max_test_result':get_test.max_test_result
+            'max_test_result':get_test.max_test_result,
+            'create_func_template': get_test.create_func_template
+
         }
         form = TestCreateForm(data_for_form)
 

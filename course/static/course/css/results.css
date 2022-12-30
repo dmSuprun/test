@@ -4,3 +4,15 @@
     align-items:center;
     flex-wrap:wrap;
 }
+.message_left{
+    display:flex;
+    justify-content:start;
+    align-items:center;
+
+}
+.message_right{
+    display:flex;
+    justify-content:end;
+    align-items:center;
+
+}

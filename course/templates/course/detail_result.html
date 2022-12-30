@@ -61,8 +61,107 @@
             {%endfor%}
         {% endfor  %}
     {% endif %}
+{% if not no_res %}
+    <hr>
+
+    <div class="card">
+      <div class="card-body" id="cardBody">
+          {% if count_comment > 0%}
+              {%for i in comments%}
+                {% if i.sender == request.user%}
+                  <div class="message_right ">
+                      <strong>{{i.comment_text}}</strong>
+                  </div>
+                {%else%}
+                <div class="message_left">
+                      {{i.sender.first_name}} {{i.sender.last_name}} - {{i.comment_text}}
+                  </div>
+                {%endif%}
+              {% endfor %}
+          {%else%}
+          <div class="flex_logo">
+            <p class="text-muted">Тут будуть відображатись коментарі</p>
+          </div>
+          {% endif %}
+      </div>
+      <div class="card-footer">
+          <form method="post" id="add_comment_form">
+            {% csrf_token%}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" required placeholder="Ваш коментар" aria-label="Recipient's username" aria-describedby="button-addon2" name="comment_text" id="comment_text">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Відправити</button>
+                <a class="btn btn-outline-secondary"  onclick="loadComents()">&#128260;</a>
+            </div>
+
+          </form>
+      </div>
+    </div>
+{%endif%}
+
 {%endblock%}
+
 {%block scripts%}
+
+
+
+    <script>
+
+        var a = "{{request.user.username}}"
+
+
+        function loadComents(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','http://127.0.0.1:8000{% url 'get_async_comments' course.course_slug test.slug username_this_detail_user %}' )
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState === 4 && xhr.status === 200 ) {
+                        var resp = xhr.response
+                        var ch = document.querySelector("#cardBody>div:last-child")
+                        var authorsAndComments = resp.split("`")
+                        var authors = authorsAndComments[0].split("~").slice(document.getElementById("cardBody").children.length)
+                        var comments = authorsAndComments[1].split("~").slice(document.getElementById("cardBody").children.length)
+                        var newElements = ''
+                        for (var iterationName in authors){
+                            if(authors[iterationName] === a){
+                                 newElements +='<div class="message_right"><strong>'+comments[iterationName]+'</strong></div>'
+                            }else{
+                                newElements +='<div class="message_left">'+authors[iterationName]+' - '+comments[iterationName]+'</div>'
+                            }
+                        }
+                        document.querySelector("#cardBody").innerHTML +=newElements
+                        comment_text.value = ''
+
+
+
+
+
+
+
+
+
+
+                }
+            };
+            xhr.send()
+
+        };
+
+        document.forms.add_comment_form.onsubmit = function(e){
+            e.preventDefault();
+            var userComment = document.forms.add_comment_form.comment_text.value
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST','http://127.0.0.1:8000{% url 'add_comment' course.course_slug test.slug username_this_detail_user %}' )
+            var formData = new FormData(document.forms.add_comment_form)
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState === 4 && xhr.status === 200 ) {
+                    loadComents()
+                }
+            };
+            xhr.send(formData)
+
+        };
+
+    </script>
 {% if type == 'teacher'%}
     <script>
         function deleteResult(){

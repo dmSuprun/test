@@ -1,4 +1,6 @@
-from django.http import Http404
+import json
+
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404,redirect
 from userAnswer.models import UserAnswer, CheckinResult, UserWhoСompletedTest
 from staticPages.views import get_role
@@ -139,6 +141,17 @@ def show_detail_course(request, course_slug):
     for material in materials:
         materials_and_test[material] = material.test
 
+    ''' get this student test result on course with dates '''
+    get_all_results = UserWhoСompletedTest.objects.filter(user=request.user, course__course_slug=course_slug)
+    COUNT_RESULT = len(get_all_results)
+    marks = []
+    dates = []
+    for result in get_all_results:
+        marks.append(str(result.user_point))
+        dates.append(str(result.date_completion)[0:10])
+
+
+
 
 
 
@@ -161,7 +174,10 @@ def show_detail_course(request, course_slug):
         'student_completed_tests':completed_tests.items(),
         'this_teacher_assign_test':[i.test for i in AssignedTest.objects.filter(course__course_slug=course_slug, test__author_of_test=request.user)],
         'count_materials':len(materials_and_test),
-        'materials':materials_and_test.items()
+        'materials':materials_and_test.items(),
+        'COUNT_RESULT':COUNT_RESULT,
+        'marks': ' '.join(marks),
+        'dates': ' '.join(dates)
     }
     return render(request, 'course/course.html', context=context)
 
@@ -527,6 +543,9 @@ def detail_test_result(request, test, course,username):
     except Exception:
         check_result={}
 
+    ''' get all coments from db '''
+    this_result_comments = Comment.objects.filter(course__course_slug=course,test__slug=test, receiver__username=username)
+
     context={
         'type':get_role(request),
         'title':f'Результат {this_request_user}',
@@ -538,7 +557,9 @@ def detail_test_result(request, test, course,username):
         'no_res': True if num_answers==0 else False,
         'testcases':check_result.items(),
         'username_this_detail_user':username,
-        'complete_result':complete_result
+        'complete_result':complete_result,
+        'comments':this_result_comments,
+        'count_comment':len(this_result_comments)
 
     }
     return render(request, 'course/detail_result.html', context=context)
@@ -593,6 +614,16 @@ def delete_student_from_course(request, student_email, course_slug):
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Доступ заборонено!</h1>', status=403)
 
     get_student = get_object_or_404(StudentInCourse, course__course_slug=course_slug, e_mail=student_email).delete()
+    compl_tests_on_this_course = UserWhoСompletedTest.objects.filter( user__email=student_email, course__course_slug=course_slug)
+    compl_tests_on_this_course.delete()
+
+    answer_on_this_course = UserAnswer.objects.filter(user__email=student_email,
+                                                                 course__course_slug=course_slug)
+    answer_on_this_course.delete()
+
+    checkin_results_on_this_course = CheckinResult.objects.filter(user__email=student_email,
+                                                                 course__course_slug=course_slug)
+    checkin_results_on_this_course.delete()
     return redirect(reverse('detail_course',kwargs={'course_slug':course_slug}))
 
 @login_required
@@ -603,6 +634,18 @@ def delete_teacher_from_course(request, teacher_email, course_slug):
 
 
     get_teacher = get_object_or_404(TeacherInCourse, course__course_slug=course_slug, e_mail=teacher_email).delete()
+    compl_tests_on_this_course = UserWhoСompletedTest.objects.filter(user__email=teacher_email,
+                                                                     course__course_slug=course_slug)
+    compl_tests_on_this_course.delete()
+
+    answer_on_this_course = UserAnswer.objects.filter(user__email=teacher_email,
+                                                      course__course_slug=course_slug)
+    answer_on_this_course.delete()
+
+    checkin_results_on_this_course = CheckinResult.objects.filter(user__email=teacher_email,
+                                                                  course__course_slug=course_slug)
+    checkin_results_on_this_course.delete()
+
     if len(TeacherInCourse.objects.filter(course__course_slug=course_slug)) == 0:
         tmp_course = get_object_or_404(CourseConfig ,course_slug=course_slug).delete()
         return redirect(reverse('index_page'))
@@ -660,4 +703,69 @@ def update_course_subject(request, course_slug):
         return HttpResponse('<h1 style="text-align:center;position:relative; top:10%;">Неможливо оновити дані про курс!</h1>',status=405)
 
 
+@login_required
+def leave_course(request, course_slug):
+    get_student = get_object_or_404(StudentInCourse, course__course_slug=course_slug, e_mail=request.user.email).delete()
+    compl_tests_on_this_course = UserWhoСompletedTest.objects.filter(user__email=request.user.email,
+                                                                     course__course_slug=course_slug)
+    compl_tests_on_this_course.delete()
+
+    answer_on_this_course = UserAnswer.objects.filter(user__email=request.user.email,
+                                                      course__course_slug=course_slug)
+    answer_on_this_course.delete()
+
+    checkin_results_on_this_course = CheckinResult.objects.filter(user__email=request.user.email,
+                                                                  course__course_slug=course_slug)
+    checkin_results_on_this_course.delete()
+    return redirect(reverse('index_page'))
+
+
+@login_required
+def add_comment(request, course_slug,test_slug,receiver):
+    get_course = get_object_or_404(CourseConfig,course_slug=course_slug )
+    get_test=get_object_or_404(TestsConfig, slug=test_slug)
+    rec = get_object_or_404(User, username=receiver)
+    if request.method == 'POST':
+        data = {
+            'course':get_course,
+            'test':get_test,
+            'sender':request.user,
+            'receiver':rec,
+            'comment_text':request.POST.get('comment_text')
+        }
+        form = addCommentForm(data)
+        if form.is_valid():
+            form.save()
+
+            return redirect(reverse('read_detail_result', kwargs={'username':receiver,'course':course_slug, 'test':test_slug}))
+
+
+
+
+
+def get_async_comments(request,course_slug,test_slug,receiver):
+    this_result_comments = Comment.objects.filter(course__course_slug=course_slug,test__slug=test_slug, receiver__username=receiver)
+    iter_num=0
+    senders = ''
+    senders_comments=''
+    for i in this_result_comments:
+        if i.sender.username == request.user.username:
+
+            senders+=str(i.sender.username)+'~'
+        else:
+            senders += str(i.sender.first_name)+' '+str(i.sender.last_name)+ '~'
+
+        senders_comments += str(i.comment_text)+'~'
+    senders = senders[0:len(senders)-1]
+    senders_comments = senders_comments[0:len(senders_comments)-1]
+
+    resp = senders+'`'+senders_comments
+
+
+
+
+
+
+
+    return HttpResponse(resp)
 

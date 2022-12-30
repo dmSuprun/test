@@ -1,4 +1,4 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from tests.models import DataForTestingCode
 from statistic.views import *
@@ -63,7 +63,7 @@ def index(request):
             for student in students_in_this_course:
                 try:
                     user_obj=get_user_by_email(student.e_mail)
-                    if len(UserWhoСompletedTest.objects.filter(user=user_obj, course=course)) == LEN_ASSIGNED_TESTS:
+                    if len(UserWhoСompletedTest.objects.filter(user=user_obj, course=course)) == LEN_ASSIGNED_TESTS and LEN_ASSIGNED_TESTS != 0 :
                         all_complete_students_num+=1
                 except Exception:
                     continue
@@ -189,17 +189,6 @@ def index(request):
 
 
 
-        # графік успішності
-        marks=[]
-        dates = []
-        this_student_all_result = UserWhoСompletedTest.objects.filter(user=request.user)
-        for result in this_student_all_result:
-            marks.append(str(result.user_point))
-            dates.append(str(result.date_completion)[0:10])
-
-
-
-
 
 
 
@@ -218,9 +207,6 @@ def index(request):
             'my_res':my_results.items(),
             'cases_total_num':cases_total_num.items(),
             'cases_complete_num':completed_test_cases.items(),
-            'marks':' '.join(marks),
-            'dates': ' '.join(dates)
-
 
         }
 
@@ -228,7 +214,7 @@ def index(request):
         context = {
             'type': TYPE_PAGE,
             'courses': [' Користувач не зареєстрований'],
-            'title': f'{request.user.first_name} {request.user.last_name}'
+            'title': f'Головна'
 
         }
     return render(request, 'staticPages/index.html', context=context)
@@ -272,4 +258,6 @@ def faq_page(request):
 
 
     return render(request, 'staticPages/static-pages/faq.html',context=context )
+
+
 

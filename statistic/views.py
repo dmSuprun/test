@@ -156,7 +156,7 @@ def student_position_in_course(course_slug, student_email):
     this_user_percent= percent_part(student_num, Count_User_In_Limits)
     if this_user_percent == ':(' or this_user_percent == 0:
         return ':('
-    return f'{round((this_user_percent),1)}% учнів мають аналогічні результати!'
+    return f'{int(round((this_user_percent),1))}% учнів мають аналогічні результати!'
 
 
 

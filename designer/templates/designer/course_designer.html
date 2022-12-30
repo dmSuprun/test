@@ -19,10 +19,10 @@
 
     <form action="/create/course/" method="post">
         {% csrf_token %}
-        <div class="form_label mb-5"><span class="name_label">{{form.name.label}}</span>: <span class="input">{{form.name}}</span></div>
-        <div class="form_label error form_errors st_error mb-5">{{form.name.errors}}</div>
-        <div class="form_label mb-5"><span class="name_label">{{form.subject.label}}</span>: <span class="input">{{form.subject}}</span></div>
-        <div class="form_label mb-5"><span class="name_label">{{form.teacher_email.label}}</span>: <span class="input">{{form.teacher_email}}</span></div>
+        <div class="form_label mb-5"><span class="name_label label">{{form.name.label}}</span>: <span class="input">{{form.name}}</span></div>
+        <div class="form_label error form_errors st_error mb-5 label">{{form.name.errors}}</div>
+        <div class="form_label mb-5"><span class="name_label label">{{form.subject.label}}</span>: <span class="input">{{form.subject}}</span></div>
+        <div class="form_label mb-5"><span class="name_label label">{{form.teacher_email.label}}</span>: <span class="input">{{form.teacher_email}}</span></div>
         <div class="form_label error mb-5">{{form.teacher_email.errors}}</div>
 
         <button class=" btn btn-primary button_sand mt-5 mb-3 login-button" type="submit">Створити</button>

@@ -7,22 +7,22 @@
 
 {%block content%}
     <div class="position">
-        <h1><span class="badge bg-primary mt-5 mb-5 position">Створити матеріал</span></h1>
+        <h1><span class="badge bg-primary mt-5 mb-5 position ">Створити матеріал</span></h1>
     </div>
     <form method="post">
         {% csrf_token %}
         <div class="form_label mb-5">
-            <span class="name_label">{{form.material_name.label}}</span>:{{form.material_name}} <span class="input"></span>
+            <span class="name_label label">{{form.material_name.label}}</span>:{{form.material_name}} <span class="input"></span>
         </div>
         <div class="form_label mb-5">
-            <span class="name_label">{{form.key_words.label}}</span>:{{form.key_words}} <span class="input"></span>
+            <span class="name_label label">{{form.key_words.label}}</span>:{{form.key_words}} <span class="input"></span>
         </div>
         <div class="form_label mb-5 none_class">
-            <span class="name_label">json</span>:{{form.material}} <span class="input"></span>
+            <span class="name_label label">json</span>:{{form.material}} <span class="input"></span>
 
         </div>
         <div class="row form_label mb-5 ">
-            <span class="name_label">Створити матеріал:</span><div id="editorjs" class="shadow-lg p-3 mb-5 bg-body rounded mt-3"></div>
+            <span class="name_label label">Створити матеріал:</span><div id="editorjs" class="shadow-lg p-3 mb-5 bg-body rounded mt-3"></div>
         </div>
         <div class="flex_row"><div class="flex_row"><button type="submit" class="btn btn-primary login-button " onclick="submit_material()">Створити</button></div></div>
 

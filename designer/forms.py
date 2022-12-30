@@ -13,6 +13,9 @@ class TestCreateForm(forms.Form):
             attrs={'class': 'form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded ', }))
     max_test_result=forms.IntegerField(label='Максимальний бал',  widget=forms.NumberInput(
             attrs={'class': 'form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded ', 'min':'0.1', 'step':'0.1'}))
+    create_func_template = forms.BooleanField(label='Автоматичне створення шаблону функції', required=False, widget=forms.CheckboxInput(
+        attrs={'class': 'form-check-input'}
+    ))
 
     def clean_name_test(self):
         get_name=self.cleaned_data['name_test']

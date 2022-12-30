@@ -18,6 +18,10 @@ urlpatterns = [
     path('delete_teacher/<str:teacher_email>/from_course/<slug:course_slug>/', delete_teacher_from_course,name='delete_teacher'),
     path('<slug:course_slug>/delete/assign_test/<slug:test_slug>/', delete_assign_test, name='delete_assign_test'),
     path('update_course_name/<slug:course_slug>/', update_course_name ,name='update_course_name'),
-    path('update_course_subject/<slug:course_slug>/', update_course_subject, name='update_course_subject')
+    path('update_course_subject/<slug:course_slug>/', update_course_subject, name='update_course_subject'),
+    path('leave/<slug:course_slug>/',leave_course,name='leave_course'),
+
+    path('comment/<slug:course_slug>/<slug:test_slug>/<str:receiver>/', add_comment, name='add_comment'),
+    path('async/comments/<slug:course_slug>/<slug:test_slug>/<str:receiver>/' , get_async_comments,  name='get_async_comments')
 
 ]

@@ -49,7 +49,6 @@ def start_test(request,course_slug,test_slug):
                     completed_pages.append(i)
 
 
-        page_and_answer={}
         ''' form logic '''
         if request.method == 'POST':
             data_get = {'answer': ''}
@@ -71,13 +70,13 @@ def start_test(request,course_slug,test_slug):
                 add_result_form = UserAnswerForm(data_for_form)
                 if add_result_form.is_valid():
                     add_result_form.save()
-                    data_get = {'answer': answer_for_this_task}
+                    data_get['answer']= answer_for_this_task
                 else:
                     upd_obj = UserAnswer.objects.get(user=request.user, test=this_request_test,
                                                      course=this_request_course, test_section=test__section)
                     upd_obj.answer = answer_for_this_task
                     upd_obj.save()
-                    data_get = {'answer': answer_for_this_task}
+                    data_get['answer']=answer_for_this_task
 
 
         else:
@@ -85,7 +84,12 @@ def start_test(request,course_slug,test_slug):
                 data_get = {'answer': section_and_she_answer[test__section]}
                 form = UserAnswerTextForm(data_get)
             else:
-                data_get={'answer':''}
+                if test__section.test.create_func_template:
+                    data_get={'answer':generate_func_template(test__section)}
+                else:
+                    data_get={'answer':''}
+
+
                 form = UserAnswerTextForm()
 
         end_test = False
@@ -129,6 +133,23 @@ def start_test(request,course_slug,test_slug):
             }
             return render(request, 'tests/error_test.html', context=context)
 
+
+
+def generate_func_template(task):
+    default_arg_names = {'int':'num', 'float':'float_num', 'str':'string_arg', 'bool':'bool_arg', 'list':'list_arg', 'tuple':'tuple_arg', 'set':'set_arg', 'frozenset':'frozenset_arg', 'dict':'dict_arg' } #type:name
+    func_name = task.function_name
+    testcase_inp_arg_types = DataForTestingCode.objects.filter(section=task)[0].input_test_data_type.split(',')
+    result_argument = ''
+    for arg in testcase_inp_arg_types:
+        if arg == 'int' or arg == 'float' or arg =='str' or arg =='bool':
+            result_argument+= default_arg_names[arg.replace(' ', '')]+','
+        else:
+            result_argument+=default_arg_names[arg[0:arg.index('(')].replace(' ', '')]+','
+
+    result_argument = result_argument[0:len(result_argument)-1]
+
+    res = f'def {func_name}({result_argument}):\n    #Напишіть щось'
+    return res
 
 
 

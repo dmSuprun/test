@@ -21,7 +21,9 @@ class TestsConfig(models.Model):
     author_of_test = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='Автор тесту')
     max_test_result = models.FloatField('Максимальний бал тесту')
     # time_on_test = models.CharField('Час на проходження(у хв)',max_length=255)
+    create_func_template = models.BooleanField('Автоматичне створення шаблону функції', default=True)
     date_creating=models.DateField(auto_now_add=True)
+
     class Meta:
         ordering=['-pk']
 

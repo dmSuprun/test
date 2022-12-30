@@ -3,6 +3,8 @@
 {%load static%}
 {%block styles%}
     <link rel="stylesheet" href="{%static 'course/css/course_style.css'%}">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+
 {%endblock%}
 
 {%block content%}
@@ -27,7 +29,16 @@
                           </li>
                         </ul>
                     </div>
+              {%else%}
+                <div class="card-header">
+                        <ul class="nav nav-pills card-header-pills">
+                          <li class="nav-item">
+                              <a href="{% url 'leave_course' post.course_slug %}"  onclick=" return deleteMyself()" class="nav-link link-danger nav-element ">Покинути курс</a>
+                          </li>
+                        </ul>
+                    </div>
               {%endif%}
+
               <img src="https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360861_1280.png"  class="card-img-top course_img" alt="...">
               <div class="card-body">
                   <div class="header_flex">
@@ -57,6 +68,13 @@
                     <a class="btn btn-primary users__button" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                         Учасники курсу
                     </a>
+                    {% if type == 'student' and COUNT_RESULT > 0 %}
+                        <a class="btn btn-primary users__button" data-bs-toggle="collapse" href="#graph" role="button" aria-expanded="false" aria-controls="graph">
+                            Мій графік успішності
+                        </a>
+                    {% endif %}
+
+
 
                 </div>
                   <div class="collapse" id="collapseExample">
@@ -82,6 +100,23 @@
 
 
                         {%endfor%}
+
+                    </div>
+                </div>
+                  <div class="collapse" id="graph">
+                    <div class="card card-body">
+                        <div class="user-test-statistic ">
+                             <div class="header_flex">
+                                <h1> <span class="badge bg-primary title__statistic m-3">Мій графік успішності</span></h1>
+                             </div>
+                            <div class="header_flex">
+                                <canvas id="myChart"></canvas>
+                            </div>
+
+                        </div>
+
+
+
 
                     </div>
                 </div>
@@ -195,28 +230,32 @@
 
 
 {%block scripts%}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+    <script>
+        function deleteMyself(){
+            const checkDelete = confirm("Ви дійсно бажаєте покинути цей курс?")
+            if (checkDelete){
+                return true
+            }
+            return false
+        };
+    </script>
     {% if type == 'teacher' %}
         <script>
 
             function updateCourseName(){
                 document.getElementById('courseName').innerHTML = ''
                 document.getElementById('course__pero').innerHTML = ''
-
                 document.getElementById('courseName').innerHTML = '<form method="post" action="/course/update_course_name/{{post.course_slug}}/" >{%csrf_token%}<h5 class="card-title title_course_card_position">Нова назва: <input required value="{{post.name}}" name="newName" id="new_name_value" type="text"  class="form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded  "><button class="btn btn-primary " type="submit">Змінити</button> <div class="btn btn-primary " onclick="returnOldName()" >Відмінити</div></h5></form>'
-
-
-
-
             };
 
             function returnOldName(){
-
                 document.getElementById('courseName').innerHTML = '<h4 class="card-title title_course_card_position" id="courseName__text" >Курс: {{post.name}}</h4>'
                 document.getElementById('course__pero').innerHTML = '&#9997;'
+            };
 
-            };
-            function updateSubject(){
-            };
+
             function deleteFunc(e){
                 var deleteOrNot = confirm("Ви дійсно бажаєте видалити цього учасника з курсу?")
                 if (deleteOrNot){
@@ -230,14 +269,10 @@
                 document.getElementById('subject').innerHTML = ''
                 document.getElementById('course__pero__subject').innerHTML = ''
                 document.getElementById('subject').innerHTML = '<form method="post" action="/course/update_course_subject/{{post.course_slug}}/" >{%csrf_token%}<h5 class="card-title title_course_card_position">Нова назва предмету: <input required value="{{post.subject}}" name="newSubject"  type="text"  class="form-control shadow-lg p-3 mb-3 mt-3 bg-white rounded  "><button class="btn btn-primary mb-3" type="submit">Змінити</button> <div class="btn btn-primary mb-3 " onclick="OldCourseSubject()" >Відмінити</div></h5></form>'
-
-
             };
             function OldCourseSubject(){
                 document.getElementById('subject').innerHTML = '<p class="text-muted" >Предмет: {{post.subject}}</p>'
                 document.getElementById('course__pero__subject').innerHTML = '&#9997;'
-
-
             };
             function deleteCourse(){
                 const checkDelete = confirm("Ви дійсно бажаєте видалити цей курс?")
@@ -246,6 +281,8 @@
                 }
                 return false
             };
+
+
             function deleteAssignTest(){
                 const checkDeleteTest = confirm("Ви дійсно бажаєте видалити цей  тест з курсу?")
                 if (checkDeleteTest){
@@ -253,10 +290,45 @@
                 }
                 return false
             };
+        </script>
+    {% elif type == 'student' %}
+        <script>
+          var dates = "{{dates}}"
+          var marks = "{{marks}}"
+          const ctx = document.getElementById('myChart');
 
 
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: dates.split(" "),
+              datasets: [{
+                label: 'Лінія мого росту',
+                data: marks.split(" "),
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+              }]
+            },
+            options: {
+                animations: {
+                    tension: {
+                        duration: 2000,
+                        easing: 'linear',
+                        from: 0.2,
+                        to: 0,
+                        loop: true
+                    }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+            }
+          });
         </script>
     {% endif %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+
 {%endblock%}
 

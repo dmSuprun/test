@@ -6,5 +6,7 @@ class CourseConfigAdmin(admin.ModelAdmin):
 admin.site.register(CourseConfig, CourseConfigAdmin)
 admin.site.register(AssignedTest)
 admin.site.register(AssignedMaterial)
+admin.site.register(Comment)
+
 
 
