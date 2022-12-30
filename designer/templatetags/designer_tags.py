@@ -36,17 +36,35 @@ def show_options(this_argument_num,all_arguments):
 
 
 @register.inclusion_tag('designer/items.html')
-def show_item(this_argument_num,all_arguments):
+def show_item(this_argument_num,all_arguments, isOutput):
     types= ('str', 'int', 'float', 'bool')
     get_this_arg_val=all_arguments[this_argument_num]
 
     if cut_type_value_from_difficult_data_type(get_this_arg_val) == 'list' or cut_type_value_from_difficult_data_type(get_this_arg_val) == 'tuple' or cut_type_value_from_difficult_data_type(get_this_arg_val) == 'set' or cut_type_value_from_difficult_data_type(get_this_arg_val) == 'frozenset':
         this_item_type = cut_items_type(get_this_arg_val)
-        return {'types':types,'this_item':this_item_type, 'exist':True,'arg_num':this_argument_num,'isDict':False}
+        item_name = ''
+        if isOutput == 'True':
+            item_name = 'outputlistItem'
+        else:
+            item_name = 'listItem'
+
+
+        return {'types':types,'this_item':this_item_type, 'exist':True,'arg_num':this_argument_num,'isDict':False, 'item_name':item_name}
     elif  cut_type_value_from_difficult_data_type(get_this_arg_val) == 'dict':
         this_item_dict_key=cut_items_type(get_this_arg_val)[:(cut_items_type(get_this_arg_val).index(':'))]
         this_item_dict_val = cut_items_type(get_this_arg_val)[(cut_items_type(get_this_arg_val).index(':')+1):len(cut_items_type(get_this_arg_val))]
-        return {'types':types,'this_key':this_item_dict_key,'this_val':this_item_dict_val, 'exist':True,'arg_num':this_argument_num,'isDict':True}
+        dict_item = ''
+        if isOutput == 'True':
+            dict_item="dictOutputKey"
+        else:
+            dict_item="dictKey"
+
+        dict_val = ''
+        if isOutput == 'True':
+            dict_item="dictOutputValue"
+        else:
+            dict_item="dictValue"
+        return {'types':types,'this_key':this_item_dict_key,'this_val':this_item_dict_val, 'exist':True,'arg_num':this_argument_num,'isDict':True,'dict_item':isOutput,'dict_val':dict_val}
     return {'exist':False}
 
 

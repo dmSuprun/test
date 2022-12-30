@@ -45,6 +45,8 @@
             <button class="btn btn-success " type="submit">Зберегти</button>
             <a href="{% url 'create_task' test.slug %}" class="btn btn-primary login-button" >До конструктора</a>
             <a href="{% url 'create_testcase' this_task_pk %}" class="btn btn-primary login-button" >Додати тесткейси</a>
+            <a href="{% url 'index_page' %}" class="btn btn-primary login-button" >На головну</a>
+
             <a class="btn btn-danger" style="letter-spacing:2px;" href="{% url 'delete_task' task.test.slug task.pk %}" onclick="return deleteTask()">Видалити</a>
         </div>
 

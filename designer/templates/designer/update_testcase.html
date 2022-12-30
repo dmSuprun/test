@@ -40,7 +40,7 @@
                             </div>
                             <div class="flex_row">
                                 <div id="items_{{arg}}">
-                                    {%show_item arg arguments%}
+                                    {%show_item arg arguments "False"%}
                                 </div>
                             </div>
                             <div id="types_list_{{arg}}" class="mt-3 mb-3 flex_row"></div>
@@ -83,12 +83,12 @@
                             <div class="input-group mb-3 input-group-lg" style="auto;">
                                 <label class="input-group-text">Вихідне значення №{{out}}</label>
                                 <select class="form-select" required="" onchange="checkOutputFloatType(this,{{out}})" name="outputConfig">
-                                    {% show_options out outputs %}
+                                    {% show_options out outputs  %}
                                 </select>
                             </div>
                             <div class="flex_row">
                                 <div id="output_items_{{out}}">
-                                    {%show_item out outputs%}
+                                    {%show_item out outputs "True"%}
                                 </div>
                             </div>
 

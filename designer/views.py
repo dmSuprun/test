@@ -22,8 +22,6 @@ def union_types(list_tmp,key_list,input_field):
     result_input_types = ''
     iteration=0
     for arg in my_list:
-
-
         iteration+=1
         if arg == 'tuple' or arg == 'list' or arg == 'set' or arg == 'frozenset' :
 
@@ -35,8 +33,12 @@ def union_types(list_tmp,key_list,input_field):
                 tmp = 'outputlistItem' + str(iteration)
 
 
+
             add_list = list_tmp.getlist(tmp)
+
+            print(add_list, tmp,list_tmp)
             result_input_types += add_list[0]
+
             result_input_types += '),'
 
 

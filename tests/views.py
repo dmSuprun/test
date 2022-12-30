@@ -84,11 +84,13 @@ def start_test(request,course_slug,test_slug):
                 data_get = {'answer': section_and_she_answer[test__section]}
                 form = UserAnswerTextForm(data_get)
             else:
-                if test__section.test.create_func_template:
-                    data_get={'answer':generate_func_template(test__section)}
-                else:
-                    data_get={'answer':''}
-
+                try:
+                    if test__section.test.create_func_template:
+                        data_get={'answer':generate_func_template(test__section)}
+                    else:
+                        data_get={'answer':''}
+                except AttributeError:
+                    data_get = {'answer': ''}
 
                 form = UserAnswerTextForm()
 
@@ -141,11 +143,13 @@ def generate_func_template(task):
     func_name = task.function_name
     testcase_inp_arg_types = DataForTestingCode.objects.filter(section=task)[0].input_test_data_type.split(',')
     result_argument = ''
+    arg_num=0
     for arg in testcase_inp_arg_types:
+        arg_num+=1
         if arg == 'int' or arg == 'float' or arg =='str' or arg =='bool':
-            result_argument+= default_arg_names[arg.replace(' ', '')]+','
+            result_argument+= default_arg_names[arg.replace(' ', '')]+'_'+str(arg_num)+','
         else:
-            result_argument+=default_arg_names[arg[0:arg.index('(')].replace(' ', '')]+','
+            result_argument+=default_arg_names[arg[0:arg.index('(')].replace(' ', '')]+'_'+str(arg_num)+','
 
     result_argument = result_argument[0:len(result_argument)-1]
 
