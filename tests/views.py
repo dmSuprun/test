@@ -106,6 +106,7 @@ def start_test(request,course_slug,test_slug):
             'title':f'{this_request_test.name_test}',
             'course':this_request_course.course_slug,
             'test':this_request_test.slug,
+            'testObj':this_request_test,
             'type':get_role(request),
             'answer':data_get['answer']
 

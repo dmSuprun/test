@@ -16,6 +16,10 @@ class TestCreateForm(forms.Form):
     create_func_template = forms.BooleanField(label='Автоматичне створення шаблону функції', required=False, widget=forms.CheckboxInput(
         attrs={'class': 'form-check-input'}
     ))
+    autocomplete = forms.BooleanField(label='Дозвіл на автозавершення', required=False,
+                                              widget=forms.CheckboxInput(
+                                                  attrs={'class': 'form-check-input'}
+                                              ))
 
     def clean_name_test(self):
         get_name=self.cleaned_data['name_test']

@@ -22,6 +22,7 @@ class TestsConfig(models.Model):
     max_test_result = models.FloatField('Максимальний бал тесту')
     # time_on_test = models.CharField('Час на проходження(у хв)',max_length=255)
     create_func_template = models.BooleanField('Автоматичне створення шаблону функції', default=True)
+    autocomplete = models.BooleanField('Дозвіл на автозавершення', default=True)
     date_creating=models.DateField(auto_now_add=True)
 
     class Meta:

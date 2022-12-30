@@ -100,9 +100,11 @@
     editor1.session.setMode("ace/mode/python");
     // enable autocompletion and snippets
     editor1.setOptions({
-        enableAutocompletion: true,
-        enableSnippets: false,
-        enableLiveAutocompletion: true,
+        {% if testObj.autocomplete%}
+            enableAutocompletion: true,
+            enableSnippets: false,
+            enableLiveAutocompletion: true,
+        {% endif %}
         maxLines: 20000,
         minLines:15,
     });
