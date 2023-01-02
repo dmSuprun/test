@@ -23,7 +23,9 @@ class TestsConfig(models.Model):
     # time_on_test = models.CharField('Час на проходження(у хв)',max_length=255)
     create_func_template = models.BooleanField('Автоматичне створення шаблону функції', default=True)
     autocomplete = models.BooleanField('Дозвіл на автозавершення', default=True)
+    pre_end_check = models.BooleanField('Дозвіл на перевірку, перед завершеням тесту', default=True)
     date_creating=models.DateField(auto_now_add=True)
+
 
     class Meta:
         ordering=['-pk']

@@ -1,6 +1,11 @@
 .test_section{
     margin-top:5%;
 }
+.check_code_btn{
+    display:flex;
+    justify-content:end;
+    align-items:center;
+}
 .task-position{
     text-align:center;
 }

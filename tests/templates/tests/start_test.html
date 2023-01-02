@@ -14,19 +14,26 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div>
-                            <form action="" method="post" id="f">
+                            <div class="check_code_btn">
+                                {% if testObj.pre_end_check %}
+                                    <span onclick="check_task()">&#9654;</span>
+                                {% endif %}
+                            </div>
+
+                            <form  method="post" id="answerForm">
                                 {% csrf_token %}
                                 <div class="form_errors" >{{form.answer.errors}}</div>
                                 <p style="display:none;">{{form.answer}}</p>
 
-                                <p> <pre id="editor">{{answer}}</pre></p>
+                                <p><pre id="editor">{{answer}}</pre></p>
 
 
                                 <div class="container_btn">
                                     <button type="submit" onclick="setVal()"  class="btn btn-primary sand">Відправити</button>
 
+
                                     {% if end_test %}
-                                        <a class="btn btn-danger end__test" onclick=" return sand_test()" href="/check/{{course}}/{{test}}/complete" >Завершити</a>
+                                        <a class="btn btn-danger end__test" onclick=" return sand_test()" href="{% url 'check' course test %}" >Завершити</a>
                                     {% endif %}
                                 </div>
 
@@ -84,7 +91,10 @@
 
 
 
-
+{% if testObj.pre_end_check %}
+    <div id="test_res">
+    </div>
+{% endif %}
 
 {%endblock%}
 {%block scripts%}
@@ -120,12 +130,41 @@
     function setVal(){
         id_answer.value = editor1.getValue()
         return true
+    };
+
+    {% if testObj.pre_end_check %}
+    function send_task(){
+        var xhrCheck = new XMLHttpRequest();
+        xhrCheck.open('GET','http://127.0.0.1:8000{% url 'check_task_before_end' course test this_page.number %}' )
+            xhrCheck.onreadystatechange = function(){
+                if (xhrCheck.readyState === 4 && xhrCheck.status === 200 ) {
+                    test_res.innerHTML = xhrCheck.response
+
+
+                }
+            }
+        xhrCheck.send()
+    }
+
+    function check_task(){
+        setVal()
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST','http://127.0.0.1:8000{% url 'starttest' course test %}?page={{this_page.number}}' )
+        var formData = new FormData(document.forms.answerForm)
+        xhr.onreadystatechange = function(){
+                if (xhr.readyState === 4 && xhr.status === 200 ) {
+                    send_task()
+                }
+        };
+        xhr.send(formData)
 
 
     };
-    f.submit = function d(){
-        console.log(id_answer.value)
-    };
+    {% endif %}
+
+
+
 
 
 

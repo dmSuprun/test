@@ -7,21 +7,25 @@
 
 {%block content%}
   <div class="error_block">
-    <h1><span class="badge bg-danger error-logo-info">Помилка проходження!</span></h1>
-    <p>
-      <a class="btn btn-success to-index-from-error"  href="{% url 'detail_course' course %}" ><!-- detail_course | course_slug-->
+      <div class="log_pos">
+              <h1><span class="badge bg-danger ">Помилка проходження!</span></h1>
+
+      </div>
+    <div class="buttons mt-3 mb-5">
+      <a class="btn btn-success "  href="{% url 'detail_course' course %}" ><!-- detail_course | course_slug-->
 
         До курсу
       </a>
 
-      <a class="btn btn-primary about-error" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <a class="btn btn-primary " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Докладніше
       </a>
-    </p>
-    <div class="collapse" id="collapseExample">
+    </div>
+    <div class="collapse container" id="collapseExample">
       <div class="card card-body">
         <p class="error_type">{{type_of_error}}</p>
-        <p class="res_info ">Ваші попередні результати</p>
+          <div class="buttons"><p class="res_info">Ваші попередні результати</p></div>
+
         <table class="table_with_statistic">
             <tr class="row_table_header ">
                 <th width="35%">Тест</th>

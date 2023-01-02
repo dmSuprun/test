@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from course.models import CourseConfig
 from tests.models import TestsConfig, DataForTestingCode
@@ -259,7 +260,10 @@ def check_result(request, course, test):
         function = user_answer.test_section.function_name
         get_data_for_testing_on_this__test_section = DataForTestingCode.objects.filter(section=user_answer.test_section)
         all_data_for_testing_code_obj_in_this_test.append(get_data_for_testing_on_this__test_section)
-        checker = check_logic(user_answer.answer,get_data_for_testing_on_this__test_section,function)
+        try:
+            checker = check_logic(user_answer.answer,get_data_for_testing_on_this__test_section,function)
+        except Exception:
+            return HttpResponse("<h1 style='text-align:center;position:relative; top:10%;'>Виникла помилка при перевірці (неправильно сформовані тесткейси)! Зв'яжітьться з викладачем!</h1>")
 
         for data, test_res in checker.items():
             data_for_checkin_result_form = {

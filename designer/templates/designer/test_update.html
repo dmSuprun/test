@@ -18,15 +18,16 @@
     <div class="form_label mb-5"><span class="label">{{form.theme_test.label}}</span>: <span class="input">{{form.theme_test}}</span></div>
     <div class="form_label mb-5"><span class="label">{{form.max_test_result.label}}</span>: <span class="input">{{form.max_test_result}}</span></div>
     <div class="form_label mb-5"><span class="label">{{form.create_func_template.label}}</span>: <span class="input">{{form.create_func_template}}</span></div>
-        <div class="form_label mb-5"><span class="label">{{form.autocomplete.label}}</span>: <span class="input">{{form.autocomplete}}</span></div>
+    <div class="form_label mb-5"><span class="label">{{form.autocomplete.label}}</span>: <span class="input">{{form.autocomplete}}</span></div>
+    <div class="form_label mb-5"><span class="label">{{form.pre_end_check.label}}</span>: <span class="input">{{form.pre_end_check}}</span></div>
+
+
 
 
 
     <div class="flex_space_between mb-5">
         <button class=" btn btn-primary  mt-5 mb-3 login-button" type="submit">Зберегти зміни</button>
         <a href="{% url 'create_task' test.slug %}" class="btn btn-primary login-button mt-5 mb-3 btn_block" >До конструктору</a>
-        <a href="{% url 'index_page' %}" class="btn btn-primary login-button" >На головну</a>
-
         <a class="btn btn-danger mt-5 mb-3 " href="{% url 'delete_test' test.slug %}"   onclick="return deleteTest()" style="letter-spacing:2px;" >Видалити</a>
     </div>
 </form>

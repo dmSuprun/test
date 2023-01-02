@@ -20,6 +20,10 @@ class TestCreateForm(forms.Form):
                                               widget=forms.CheckboxInput(
                                                   attrs={'class': 'form-check-input'}
                                               ))
+    pre_end_check = forms.BooleanField(label='Дозвіл на перевірку, перед завершеням тесту', required=False,
+                                              widget=forms.CheckboxInput(
+                                                  attrs={'class': 'form-check-input'}
+                                              ))
 
     def clean_name_test(self):
         get_name=self.cleaned_data['name_test']

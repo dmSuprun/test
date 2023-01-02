@@ -1,4 +1,5 @@
-from userAnswer.models import UserWhoСompletedTest
+from django.http import HttpResponse
+from userAnswer.views import check_logic
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from staticPages.views import get_role
@@ -130,7 +131,7 @@ def start_test(request,course_slug,test_slug):
                 'this_test':this_request_test,
                 'title':f'{this_request_test.name_test}',
                 'results_qrst':user_result_on_this_test,
-                'percent_success':int(user_result_on_this_test.success_percent)*100,
+                'percent_success':int(user_result_on_this_test.success_percent),
                 'type': get_role(request)
 
             }
@@ -157,5 +158,31 @@ def generate_func_template(task):
     return res
 
 
+def check_task(request, course_slug, test_slug, task_num):
+    this_request_test = get_object_or_404(TestsConfig, slug=test_slug)
+    if not this_request_test.pre_end_check:
+        return HttpResponse("<h1 style='text-align:center;position:relative; top:10%;'>Дозвіл на перевірку відповідей, перед завершенням тесту, не на наданий!</h1>", status=403)
 
+
+
+
+    ''' get this course and this test, tasks for this test'''
+    this_request_course = get_object_or_404(CourseConfig, course_slug=course_slug)
+    task_for_this_test = TestsSection.objects.filter(test=this_request_test)[task_num-1]
+
+    get_data_for_testing_code = DataForTestingCode.objects.filter(section=task_for_this_test)
+    get_answer = UserAnswer.objects.get(user=request.user, test=this_request_test, course=this_request_course,test_section=task_for_this_test).answer
+    try:
+        checker = check_logic(get_answer, get_data_for_testing_code, task_for_this_test.function_name)
+    except Exception:
+        return HttpResponse("<h1 style='text-align:center;position:relative; top:10%;'>Виникла помилка при перевірці (неправильно сформовані тесткейси)! Зв'яжітьться з викладачем!</h1>", status=500)
+    return_string = ''
+    it=0
+    for ob, result in checker.items():
+        it+=1
+        if result:
+            return_string+=f'<div class ="alert alert-success alert-dismissible fade show" role="alert" > <strong>Тесткейс № {it}</strong> - вірно!</div>'
+        else:
+            return_string+= f'<div class ="alert alert-warning alert-dismissible fade show" role="alert" > <strong>Тесткейс № {it}</strong> - невірно!</div>'
+    return HttpResponse(return_string, status=200)
 
