@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'userAnswer',
     'designer',
     'statistic',
-    'ScientificMaterials.apps.ScientificmaterialsConfig'
+    'ScientificMaterials',
+    'testsByThemes'
 ]
 
 MIDDLEWARE = [

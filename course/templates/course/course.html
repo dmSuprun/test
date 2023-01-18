@@ -182,13 +182,13 @@
                                 {%endif%}
                             {%endfor%}
                         {%endfor%}
-                        {% if count_materials != 0 %}
+                        {% if count_materials != 0%}
                             <p class="mt-3">
-                              <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#materials" aria-expanded="false" aria-controls="collapseExample">
+                              <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#materials_{{assign_test.test.slug}}" aria-expanded="false" aria-controls="collapseExample">
                                 Переглянути матеріали цього тесту
                               </button>
                             </p>
-                            <div class="collapse" id="materials">
+                            <div class="collapse" id="materials_{{assign_test.test.slug}}">
                               <div class="card card-body">
                                   {% for assign_material, test in materials %}
                                     {% if test == assign_test.test %}

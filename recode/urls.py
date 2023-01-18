@@ -30,6 +30,7 @@ urlpatterns = [
     path('check/', include('userAnswer.urls')),
     path('create/', include('designer.urls')),
     path('materials/', include('ScientificMaterials.urls')),
+    path('created tests/', include('testsByThemes.urls')),
 
 
 ]

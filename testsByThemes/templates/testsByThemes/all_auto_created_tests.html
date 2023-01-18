@@ -1,0 +1,28 @@
+{% extends "testsByThemes/layout.html" %}
+{% load static %}
+
+{%block styles%}
+    <link rel="stylesheet" href="{%static 'designer/css/designer.css'%}">
+{% endblock %}
+
+
+{%block content%}
+    <div class="flex">
+
+
+
+        <div class="card text-bg-primary mb-3 child_container" style="max-width: 18rem;">
+            <div class="card-header">Тест</div>
+            <div class="card-body">
+                <h5 class="card-title">Змінні</h5>
+                <p class="card-text">Перейдіть за посиланням, введіть тему Вашого нового начального матеріалу та ключові слова у ньому. Оформіть наукові терміни та поняття за допомоги редактора.</p>
+                <a href="" class="btn btn-light " >Додати</a>
+            </div>
+        </div>
+
+
+    </div>
+
+
+{%endblock%}
+

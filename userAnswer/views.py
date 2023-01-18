@@ -280,19 +280,21 @@ def check_result(request, course, test):
     ''' get all information about user results in  this test '''
     all_num_of_point = this_test.max_test_result
     user_point_num = 0
+    user_test_point_num = 0
+    all_test_point = 0
 
-
-
-    all_checkin_result = CheckinResult.objects.filter(user=request.user,course=this_course,test=this_test)
+    all_checkin_result = CheckinResult.objects.filter(user=request.user, course=this_course, test=this_test)
     for res_item in all_checkin_result:
+        all_test_point += res_item.data_on_which_they_checked.num_of_point
         if res_item.testing_result:
-            user_point_num += res_item.data_on_which_they_checked.num_of_point
+            user_test_point_num += res_item.data_on_which_they_checked.num_of_point
+
 
         else:
             continue
     try:
-
-        success_percent = int(round(user_point_num/all_num_of_point,2)*100)
+        user_point_num = round((all_num_of_point * user_test_point_num) / all_test_point, 1)
+        success_percent = int(round(user_point_num / all_num_of_point, 2) * 100)
 
     except ZeroDivisionError:
         success_percent = 0

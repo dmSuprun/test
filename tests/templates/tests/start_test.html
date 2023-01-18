@@ -16,7 +16,7 @@
                         <div>
                             <div class="check_code_btn">
                                 {% if testObj.pre_end_check %}
-                                    <span onclick="check_task()">&#9654;</span>
+                                    <span onclick="check_task()" class='pre_end_check_button' id="pre_end__button">&#9654;</span>
                                 {% endif %}
                             </div>
 
@@ -138,7 +138,8 @@
         xhrCheck.open('GET','http://127.0.0.1:8000{% url 'check_task_before_end' course test this_page.number %}' )
             xhrCheck.onreadystatechange = function(){
                 if (xhrCheck.readyState === 4 && xhrCheck.status === 200 ) {
-                    test_res.innerHTML = xhrCheck.response
+                     test_res.innerHTML = ' '
+                     test_res.innerHTML = xhrCheck.response
 
 
                 }

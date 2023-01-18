@@ -12,7 +12,7 @@ class TestCreateForm(forms.Form):
     theme_test = forms.CharField(label='Опис тесту', max_length=255, widget=forms.TextInput(
             attrs={'class': 'form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded ', }))
     max_test_result=forms.IntegerField(label='Максимальний бал',  widget=forms.NumberInput(
-            attrs={'class': 'form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded ', 'min':'0.1', 'step':'0.1'}))
+            attrs={'class': 'form-control shadow-lg p-3 mb-5 mt-3 bg-white rounded ', 'min':'0.1', 'step':'0.1', 'value':12}))
     create_func_template = forms.BooleanField(label='Автоматичне створення шаблону функції', required=False, widget=forms.CheckboxInput(
         attrs={'class': 'form-check-input'}
     ))
@@ -53,7 +53,7 @@ class CreateTest(ModelForm):
 class TaskCreationForm(forms.Form):
     function = forms.CharField(label='Назва функції', max_length=255,widget=forms.TextInput(attrs={ 'class':'form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded '}))
 
-    question =forms.CharField(label='Питання',widget=forms.Textarea(attrs={ 'class':'form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded ','cols':20, 'rows':10}))
+    question =forms.CharField(label='Умова задачі',widget=forms.Textarea(attrs={ 'class':'form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded ','cols':20, 'rows':10}))
 
     def clean_function(self):
         function_name = self.cleaned_data['function']

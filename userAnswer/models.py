@@ -8,7 +8,7 @@ class UserAnswer(models.Model):
     test=models.ForeignKey(TestsConfig, on_delete=models.CASCADE)
     course=models.ForeignKey(CourseConfig, on_delete=models.CASCADE)
     test_section=models.ForeignKey(TestsSection, on_delete=models.CASCADE)
-    answer=models.TextField('Відповідь')
+    answer=models.TextField('Відповідь', blank=True)
 
 
 class CheckinResult(models.Model):
