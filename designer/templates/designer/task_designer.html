@@ -70,9 +70,9 @@
 
 
 
-       <div class="flex_row mt-5">
+        <div class="flex_row mt-5">
             <div class="row_p"  >
-                <button class="btn btn-primary m-3" type="submit">Додати завдання</button>
+                <button class="btn btn-primary m-3" type="submit">Зберегти завдання</button>
                 <a href="{% url 'index_page'%}" class="btn btn-warning ">На головну</a>
 
             </div>
@@ -498,6 +498,8 @@
         }
         function functionFieldValueValidation(value){
             // do validation for functionFieldValue
+            
+          
             const ValidSymb = ['1','2','3','4','5','6','7','8','9','0','a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J','k','K','L','l','m','M','N','n','o','O','p','P','q','Q','r','R','s','S','t','T','U','u','v','V','w','W','x','X','y','Y','z','Z','_']
             for (var i in value){
                 if(ValidSymb.includes(value[i])){
@@ -506,10 +508,14 @@
                     return [false, i]
                 }
             }
-            return [true, 'ok']
+            if (value != 'recode_user_actual_result'){
+              return [true, 'ok']
+              
+            }
+            return [false, 'Замініть назву функції!']
         };
 
-        document.getElementById('addTask').onsubmit = function(){
+document.getElementById('addTask').onsubmit = function(){
             if (document.getElementById('allFuncArguments').hasChildNodes() && document.getElementById('allOutputArguments').hasChildNodes()){
                 no_arg_error.innerHTML = ''
                 if(document.getElementById('testcases_wrapper').hasChildNodes() == false){
@@ -548,7 +554,13 @@
                     return true
 
                 }else{
-                    error_block2.innerHTML = '<p>Функція має не коректний('+id_function.value[validationRes[1]]+') символ!</p>'
+                    t = '<p>Функція має не коректний('+id_function.value[validationRes[1]]+') символ!</p>'
+                    if (validationRes[1] == 'Замініть назву функції!' ){
+                      t = '<p>Замініть назву функції!</p>'
+                      
+                    }
+                    
+                    error_block2.innerHTML = t
                     return false
 
                 }

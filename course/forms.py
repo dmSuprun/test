@@ -86,7 +86,7 @@ class CreateCourseTextForm(forms.Form):
         if len(StudentInCourse.objects.filter(e_mail=this_e_mail)) != 0:
             raise ValidationError('Така електронна адреса вже має роль')
 
-        elif this_e_mail.count(',') != 0 or this_e_mail.count('@') != 1:
+        elif this_e_mail.count(',') != 0 or this_e_mail.count('@') > 1:
             raise ValidationError('Адреса має бути одна!')
 
         else:

@@ -14,11 +14,7 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div>
-                            <div class="check_code_btn">
-                                {% if testObj.pre_end_check %}
-                                    <span onclick="check_task()" class='pre_end_check_button' id="pre_end__button">&#9654;</span>
-                                {% endif %}
-                            </div>
+                            
 
                             <form  method="post" id="answerForm">
                                 {% csrf_token %}
@@ -93,6 +89,9 @@
 
 {% if testObj.pre_end_check %}
     <div id="test_res">
+      {%autoescape off%}
+        {{testing_result}}
+      {%endautoescape%}
     </div>
 {% endif %}
 
@@ -132,38 +131,7 @@
         return true
     };
 
-    {% if testObj.pre_end_check %}
-    function send_task(){
-        var xhrCheck = new XMLHttpRequest();
-        xhrCheck.open('GET','http://127.0.0.1:8000{% url 'check_task_before_end' course test this_page.number %}' )
-            xhrCheck.onreadystatechange = function(){
-                if (xhrCheck.readyState === 4 && xhrCheck.status === 200 ) {
-                     test_res.innerHTML = ' '
-                     test_res.innerHTML = xhrCheck.response
-
-
-                }
-            }
-        xhrCheck.send()
-    }
-
-    function check_task(){
-        setVal()
-        var xhr = new XMLHttpRequest();
-
-        xhr.open('POST','http://127.0.0.1:8000{% url 'starttest' course test %}?page={{this_page.number}}' )
-        var formData = new FormData(document.forms.answerForm)
-        xhr.onreadystatechange = function(){
-                if (xhr.readyState === 4 && xhr.status === 200 ) {
-                    send_task()
-                }
-        };
-        xhr.send(formData)
-
-
-    };
-    {% endif %}
-
+    
 
 
 

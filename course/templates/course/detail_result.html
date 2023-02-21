@@ -16,10 +16,13 @@
     {% else %}
         <div class="flex_logo">
             {% if type == 'teacher'%}
+
                 <a href="{% url 'delete_result' test.slug course.course_slug username_this_detail_user%}" onclick="return deleteResult()" class="btn btn-close"></a>
+                      
 
             {% endif%}
             <h1><span class="badge bg-primary m-5">Результати {{user}} </span></h1>
+           
 
 
 
@@ -27,6 +30,7 @@
         <div class="flex_logo">
             <h3>Результат - <span class="badge bg-info">{{complete_result.user_point}} / {{complete_result.test.max_test_result}}</span></h3>
             <h3 class="m-3">Завершив - <span class="badge bg-info ">{{complete_result.date_completion}} </span></h3>
+           
         </div>
         {% for task,task_num in tasks %}
             <h3>Завдання <span class="badge m-3 bg-primary">{{task_num}}</span></h3>
@@ -39,6 +43,7 @@
                               <th scope="col">Тип вхідних даних</th>
                               <th scope="col">Вихідні дані</th>
                               <th scope="col">Тип вихідних даних</th>
+                              <th scope="col">Результат виконання коду учня</th>
                               <th scope="col">Результат перевірки</th>
                         </tr>
                         {% for result_obj,answer_obj in testcases %}
@@ -48,6 +53,7 @@
                                     <td>{{result_obj.data_on_which_they_checked.input_test_data_type}}</td>
                                     <td>{{result_obj.data_on_which_they_checked.output_test_data}}</td>
                                     <td>{{result_obj.data_on_which_they_checked.output_test_data_type}}</td>
+                                  <td>{{result_obj.actual_user_result}}</td>
                                     {% if result_obj.testing_result == True %}
                                         <td>&#9989;</td>
                                     {%else%}
@@ -97,6 +103,11 @@
       </div>
     </div>
 {%endif%}
+{% if type == 'teacher'%}
+<div class="flex_logo">
+                <a href="{% url 'read_result' test.slug course.course_slug %}" class="btn btn-primary m-5 users__button">Всі результати</a>
+</div>
+{% endif%}
 
 {%endblock%}
 
@@ -111,7 +122,7 @@
 
         function loadComents(){
             var xhr = new XMLHttpRequest();
-            xhr.open('GET','http://127.0.0.1:8000{% url 'get_async_comments' course.course_slug test.slug username_this_detail_user %}' )
+            xhr.open('GET','https://recode.dsuprun2023.repl.co{% url 'get_async_comments' course.course_slug test.slug username_this_detail_user %}' )
             xhr.onreadystatechange = function(){
                 if (xhr.readyState === 4 && xhr.status === 200 ) {
                         var resp = xhr.response
@@ -150,7 +161,7 @@
             var userComment = document.forms.add_comment_form.comment_text.value
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST','http://127.0.0.1:8000{% url 'add_comment' course.course_slug test.slug username_this_detail_user %}' )
+            xhr.open('POST','https://recode.dsuprun2023.repl.co{% url 'add_comment' course.course_slug test.slug username_this_detail_user %}' )
             var formData = new FormData(document.forms.add_comment_form)
             xhr.onreadystatechange = function(){
                 if (xhr.readyState === 4 && xhr.status === 200 ) {

@@ -54,8 +54,9 @@
 
 
         <div class="flex_row mt-5">
-            <div class="flex_container"  >
-                <button class="btn btn-primary" type="submit">Відправити</button>
+            <div class="row_p"  >
+                <button class="btn btn-primary m-3" type="submit">Відправити</button>
+                <a href="{% url 'index_page'%}" class="btn btn-warning ">Завершити створення</a>
             </div>
         </div>
 
@@ -484,7 +485,7 @@
                 const inputValObjects = document.getElementsByName('inp_value')
                 const outputValObjects = document.getElementsByName('out_value')
                 for (var i=0; i<inputValObjects.length; i++){
-                    var baseValue = inputValObjects[i].value.split(" ").join("")
+                    var baseValue = inputValObjects[i].value.trim()
                     inputValObjects[i].value = baseValue
 
                     if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
@@ -496,7 +497,7 @@
                 }
                 for (var i=0; i<outputValObjects.length; i++){
 
-                    var baseValue = outputValObjects[i].value.split(" ").join("")
+                    var baseValue = outputValObjects[i].value.trim()
                     outputValObjects[i].value = baseValue
                     if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
                         outputValObjects[i].value =baseValue.slice(0, -1);

@@ -16,18 +16,17 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-yo=lf7)r!=0at8=lph%@c#ai=a6n34=m9%kwu(g0*8doo7qowa'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -80,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'recode.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -88,57 +86,57 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    'OPTIONS': {
+        'isolation_level': 'repeatable read'
+    },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'uk'
 
-TIME_ZONE = 'Europe/Kyiv'
+TIME_ZONE = "Europe/Kiev"
 
 USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "static"),
 ]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
 
 #authorization block
 
@@ -147,10 +145,10 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '434532287440-o92cf38788hqa8kmorcvacl9fo861c6b.apps.googleusercontent.com'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-LOGOUT_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/authorization/login/google-oauth2/'
-

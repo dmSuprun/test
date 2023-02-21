@@ -16,3 +16,18 @@
     align-items:center;
 
 }
+
+.users__button{
+    letter-spacing: 2px;
+}
+.users__button:hover{
+    background-color:#000;
+    transition:all 1.1s ease 1ms
+
+}
+.users__button:not(hover){
+    background-color:#0d6efd;
+    transition:all 1.1s ease 1ms
+
+
+}

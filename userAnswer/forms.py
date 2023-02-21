@@ -51,6 +51,9 @@ class UserAnswerForm(ModelForm):
             raise ValidationError('Відповідь існує')
 
         return data
+          
+
+
 
 
 class UserWhoCompleteForm(ModelForm):
@@ -61,14 +64,11 @@ class UserWhoCompleteForm(ModelForm):
     def clean(self):
         data=self.cleaned_data
 
-        try:
-            obj = UserWhoСompletedTest.objects.get(user=data['user'], test=data['test'],course=data['course'])
-            existence = True
-        except Exception:
-            existence = False
-        if existence:
+        
+        if len(UserWhoСompletedTest.objects.filter(user=data['user'], test=data['test'],course=data['course'])) >= 1:
             raise ValidationError('Запис уже існує')
-        return data
+        else:
+          return data
 
 
 

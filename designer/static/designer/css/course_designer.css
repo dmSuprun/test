@@ -280,9 +280,8 @@
 .none_class{
     display:none;
 }
-
 .row_p{
-
+  
     display: flex;
     flex-direction: row;
     align-items: center;

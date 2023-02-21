@@ -532,7 +532,7 @@
                 const inputValObjects = document.getElementsByName('inp_value')
                 const outputValObjects = document.getElementsByName('out_value')
                 for (var i=0; i<inputValObjects.length; i++){
-                    var baseValue = inputValObjects[i].value.split(" ").join("")
+                    var baseValue = inputValObjects[i].value.trim()
                     inputValObjects[i].value = baseValue
 
                     if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
@@ -544,7 +544,7 @@
                 }
                 for (var i=0; i<outputValObjects.length; i++){
 
-                    var baseValue = outputValObjects[i].value.split(" ").join("")
+                    var baseValue = outputValObjects[i].value.trim()
                     outputValObjects[i].value = baseValue
                     if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
                         outputValObjects[i].value =baseValue.slice(0, -1);
