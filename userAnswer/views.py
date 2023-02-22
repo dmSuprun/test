@@ -6,6 +6,15 @@ from .forms import UserWhoCompleteForm, CheckinResultForm
 from .models import UserAnswer, CheckinResult
 from django.contrib.auth.decorators import login_required
 from staticPages.views import get_role
+from multiprocessing import Process
+import time
+from datetime import datetime
+
+def check_timeout():
+    start = datetime.now()
+    while (datetime.now() - start).seconds < 5:
+        time.sleep(1)
+    return False
 
 
 def check_logic(answer, data_for_check, func_name):
@@ -254,13 +263,17 @@ def check_logic(answer, data_for_check, func_name):
             OUTPUT_VAL += ABSOLUTE_OUT_RESULT[i]
 
         additional_string = f'\ntry:\n      recode_user_actual_result={func_name}({INPUT_VAL})\nexcept Exception:\n      recode_user_actual_result="Помилка виконання"\nif {func_name}({INPUT_VAL}) != ({OUTPUT_VAL}):\n      raise AssertionError("Fail")'
+        mod = f'\nfrom threading import Thread\n'
+        check_time = f'\nth = Thread(target={func_name}, args=[{INPUT_VAL}])\nth.start()\nth.join(timeout=10)\nif th.is_alive():\n      raise AssertionError("Fail")'
 
-        result_answer = answer + additional_string
+        result_answer =mod+ answer+check_time+ additional_string
+
+
         
 
         try:
-            exec(result_answer, globals_and_locals_for_exec_func,
-                 globals_and_locals_for_exec_func)
+            exec(result_answer, globals_and_locals_for_exec_func, globals_and_locals_for_exec_func)
+
             try:
                 actual_user_result = globals_and_locals_for_exec_func[
                     'recode_user_actual_result']
