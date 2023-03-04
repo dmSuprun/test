@@ -166,8 +166,12 @@ def generate_func_template(task):
         'dict': 'dict_arg'
     }  #type:name
     func_name = task.function_name
-    testcase_inp_arg_types = DataForTestingCode.objects.filter(
-        section=task)[0].input_test_data_type.split(',')
+
+    try:
+        testcase_inp_arg_types = DataForTestingCode.objects.filter(
+            section=task)[0].input_test_data_type.split(',')
+    except Exception:
+        return '#Function template generation error!'
     result_argument = ''
     arg_num = 0
     for arg in testcase_inp_arg_types:
