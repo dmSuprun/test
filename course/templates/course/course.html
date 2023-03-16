@@ -164,7 +164,7 @@
                                 <a href="{% url 'all_material_for_assign' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Додати матеріал</a>
 
                             {% endif %}
-                            <a href="{% url 'read_result' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Результати</a>
+                            <a href="{% url 'read_results' assign_test.test.slug post.course_slug %}" class="btn btn-primary users__button m-3 ">Результати</a>
                             <a class="btn btn-primary users__button m-3" data-bs-toggle="collapse" href="#collapseExample_{{assign_test.test.slug}}" role="button" aria-expanded="false" aria-controls="collapseExample_{{assign_test.test.slug}}">Виписка оцінок</a>
                       <div class="collapse" id="collapseExample_{{assign_test.test.slug}}">
                         <div class="card card-body">

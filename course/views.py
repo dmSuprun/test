@@ -833,3 +833,6 @@ def get_async_comments(request, course_slug, test_slug, receiver):
     resp = senders + '`' + senders_comments
 
     return HttpResponse(resp)
+
+def read_results_by_one_task(test, course, task_pk):
+    pass

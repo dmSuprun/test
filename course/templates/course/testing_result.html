@@ -25,7 +25,7 @@
                             {% endfor %}
 
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'read_result' test.slug course.course_slug %}">Всі результати</a></li>
+                            <li><a class="dropdown-item" href="{% url 'read_results' test.slug course.course_slug %}">Всі результати</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -34,8 +34,34 @@
     </nav>
 
     {% for task,task_num in tasks %}
+<!--        <div class="flex_logo">-->
+<!--            <a href="{% url 'detail_course'  course.course_slug %}"><h3><span class="badge m-3 bg-primary">{{task_num}}</span></h3></a>-->
+<!--        </div>-->
+
+    {%endfor%}
+
+
+    {% for task,task_num in tasks %}
         <h3>Завдання <span class="badge m-3 bg-primary">{{task_num}}</span></h3>
         {% for answer,section in answers %}
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                        Умова завдання
+                      </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                      <div class="accordion-body">
+                          <div class="alert alert-light" role="alert">
+                            {{answer.test_section.question}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+
+
             {%if section == task %}
                 <p class="text-muted"><img height="20" src="https://cdn.pixabay.com/photo/2016/03/19/04/40/cap-1266204_1280.png" alt=""> {{answer.user.first_name}} {{answer.user.last_name}}</p> <textarea cols="20" rows="10" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " disabled >{{answer.answer}}</textarea>
                 <table class="table table-striped">
