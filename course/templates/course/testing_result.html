@@ -33,67 +33,24 @@
         </div>
     </nav>
 
-    {% for task,task_num in tasks %}
-<!--        <div class="flex_logo">-->
-<!--            <a href="{% url 'detail_course'  course.course_slug %}"><h3><span class="badge m-3 bg-primary">{{task_num}}</span></h3></a>-->
-<!--        </div>-->
 
-    {%endfor%}
+        <div class="flex_logo mt-3">
 
+            <nav >
 
-    {% for task,task_num in tasks %}
-        <h3>Завдання <span class="badge m-3 bg-primary">{{task_num}}</span></h3>
-        {% for answer,section in answers %}
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                        Умова завдання
-                      </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                      <div class="accordion-body">
-                          <div class="alert alert-light" role="alert">
-                            {{answer.test_section.question}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-            </div>
+              <ul class="pagination pagination-lg flex_logo">
+                  <h3>Завдання:	&#160;</h3>
+                  {% for task,task_num in tasks %}
+                        <li class="page-item"><a class="page-link" href="{% url 'read_one_res'  task.test.slug course.course_slug task.pk %}?task={{task_num}}">{{task_num}}</a></li>
+                  {%endfor%}
+
+              </ul>
+            </nav>
+
+        </div>
 
 
-            {%if section == task %}
-                <p class="text-muted"><img height="20" src="https://cdn.pixabay.com/photo/2016/03/19/04/40/cap-1266204_1280.png" alt=""> {{answer.user.first_name}} {{answer.user.last_name}}</p> <textarea cols="20" rows="10" class="form-control shadow-lg p-3 mb-5 bg-white mt-3 rounded " disabled >{{answer.answer}}</textarea>
-                <table class="table table-striped">
 
-                             <tr>
-                              <th scope="col">Вхідні дані</th>
-                              <th scope="col">Тип вхідних даних</th>
-                              <th scope="col">Вихідні дані</th>
-                              <th scope="col">Тип вихідних даних</th>
-                              <th scope="col">Результат виконання коду учня</th>
-                              <th scope="col">Результат перевірки</th>
-                            </tr>
-                    {% for result_obj,answer_obj in testcases_with_result %}
-                        {%if answer == answer_obj %}
-                                <tr >
-                                    <td>{{result_obj.data_on_which_they_checked.input_test_data}}</td>
-                                    <td>{{result_obj.data_on_which_they_checked.input_test_data_type}}</td>
-                                    <td>{{result_obj.data_on_which_they_checked.output_test_data}}</td>
-                                    <td>{{result_obj.data_on_which_they_checked.output_test_data_type}}</td>
-                                  <td>{{result_obj.actual_user_result}}</td>
-                                    {% if result_obj.testing_result == True %}
-                                        <td>&#9989;</td>
-                                    {%else%}
-                                        <td>&#10060;</td>
-                                    {%endif%}
-                                </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
-            {%endif%}
-        {%endfor%}
-    {%endfor%}
 
 
 

@@ -497,7 +497,7 @@ def test_result(request, test, course):
 
     context = {
         'type': get_role(request),
-        'title': f'Результат тесту {this_test.name_test}',
+        'title': f'Результати тесту {this_test.name_test}',
         'course': this_course,
         'test': this_test,
         'tasks': task_rating.items(),
@@ -834,5 +834,31 @@ def get_async_comments(request, course_slug, test_slug, receiver):
 
     return HttpResponse(resp)
 
-def read_results_by_one_task(test, course, task_pk):
-    pass
+@login_required
+def read_results_by_one_task(request,test_slug, course_slug, task_pk):
+    this_req_test = get_object_or_404(TestsConfig,slug=test_slug)
+    task_num = request.GET.get('task')
+    this_req_task_in_test = get_object_or_404(TestsSection, pk=task_pk)
+    this_req_course = get_object_or_404(CourseConfig, course_slug=course_slug)
+    ''' collect all students e-mails'''
+    all_students_in_this_course = StudentInCourse.objects.filter(course=this_req_course)
+    students_list = [i.e_mail for i in all_students_in_this_course]
+    ''' end collect all students e-mails and get sutends annswers'''
+    answers={}
+    get_student_answers = CheckinResult.objects.filter(answer__test_section=this_req_task_in_test, course=this_req_course,test=this_req_test)
+    for answ in get_student_answers:
+        answers[answ.user] = answ
+
+
+    context={
+        'title':f'Відповіді до {task_num} завдання',
+        'type':get_role(request),
+        'task_text':this_req_task_in_test.question,
+        'task_num':task_num,
+        'students':students_list,
+        'answers':answers,
+        'count_answer':len(answers),
+        'course':this_req_course,
+        'test':this_req_test
+    }
+    return render(request, 'course/all_results_of_one_task.html', context=context)

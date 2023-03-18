@@ -154,6 +154,7 @@ def update_test(request, test_slug):
         if form.is_valid():
 
             get_test.name_test = form.cleaned_data['name_test']
+            get_test.slug = transliteration(form.cleaned_data['name_test'])
             get_test.theme_test = form.cleaned_data['theme_test']
             get_test.max_test_result = form.cleaned_data['max_test_result']
             get_test.create_func_template = form.cleaned_data[

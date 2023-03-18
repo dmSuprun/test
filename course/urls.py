@@ -13,8 +13,8 @@ urlpatterns = [
     path('<slug:course>/assign/<slug:test>/', assign, name='assign_complete'),
 
 
-    path('<slug:test>/read_result/<slug:course>', test_result, name='read_results'),
-    path('<slug:test>/read_result/<slug:course>/<int:task_pk>/',read_results_by_one_task,name='read_results_by_one_task' ),
+    path('<slug:test>/read_result/<slug:course>/', test_result, name='read_results'),
+    path('read_one_res/<slug:test_slug>/<slug:course_slug>/<int:task_pk>/',read_results_by_one_task, name='read_one_res'),
     path('<slug:test>/read_result/<slug:course>/<str:username>/', detail_test_result, name='read_detail_result'),
     path('<slug:test_slug>/delete_user_result/<slug:course_slug>/<str:username>/', delete_test_result, name='delete_result' ),
 

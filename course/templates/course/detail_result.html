@@ -9,7 +9,7 @@
             <h1><span class="badge bg-primary m-5">Цей користувач ще не тестувавсь!</span></h1>
         </div>
         <div class="flex_logo">
-            <a href="{% url 'read_result' test.slug course.course_slug %}" class="btn btn-primary m-5">Всі результати</a>
+            <a href="{% url 'read_results' test.slug course.course_slug %}" class="btn btn-primary m-5">Всі результати</a>
             <a href="{% url 'detail_course' course.course_slug %}" class="btn btn-primary m-5">Назад до курсу</a>
 
         </div>
@@ -105,7 +105,7 @@
 {%endif%}
 {% if type == 'teacher'%}
 <div class="flex_logo">
-                <a href="{% url 'read_result' test.slug course.course_slug %}" class="btn btn-primary m-5 users__button">Всі результати</a>
+                <a href="{% url 'read_results' test.slug course.course_slug %}" class="btn btn-primary m-5 users__button">Всі результати</a>
 </div>
 {% endif%}
 
