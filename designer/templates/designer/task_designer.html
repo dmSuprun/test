@@ -539,8 +539,7 @@ document.getElementById('addTask').onsubmit = function(){
                 }
                 for (var i=0; i<outputValObjects.length; i++){
 
-                    var baseValue = outputValObjects[i].value.split(" ").join("")
-                    outputValObjects[i].value = baseValue
+
                     if (baseValue.slice(baseValue.length-1, baseValue.length) == ';'){
                         outputValObjects[i].value =baseValue.slice(0, -1);
 
