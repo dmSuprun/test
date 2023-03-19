@@ -503,7 +503,8 @@ def test_result(request, test, course):
         'tasks': task_rating.items(),
         'answers': answer_on_task.items(),
         'testcases_with_result': testing_result.items(),
-        'users': users.items()
+        'users': users.items(),
+        'count_task':len(task_rating)
     }
     return render(request, 'course/testing_result.html', context=context)
 
@@ -841,13 +842,25 @@ def read_results_by_one_task(request,test_slug, course_slug, task_pk):
     this_req_task_in_test = get_object_or_404(TestsSection, pk=task_pk)
     this_req_course = get_object_or_404(CourseConfig, course_slug=course_slug)
     ''' collect all students e-mails'''
-    all_students_in_this_course = StudentInCourse.objects.filter(course=this_req_course)
-    students_list = [i.e_mail for i in all_students_in_this_course]
+    all_students_in_this_course = [i.e_mail for i in StudentInCourse.objects.filter(course=this_req_course)]
+    students_list = []
+    for i in all_students_in_this_course:
+        try:
+            user_obj = User.objects.get(email=i)
+            students_list.append(user_obj)
+        except Exception:
+            continue
+
+
+
     ''' end collect all students e-mails and get sutends annswers'''
     answers={}
-    get_student_answers = CheckinResult.objects.filter(answer__test_section=this_req_task_in_test, course=this_req_course,test=this_req_test)
-    for answ in get_student_answers:
-        answers[answ.user] = answ
+    for one_stud_in_course in students_list:
+        answers_val = CheckinResult.objects.filter(answer__test_section=this_req_task_in_test, course=this_req_course,test=this_req_test, user=one_stud_in_course)
+        if len(answers_val) == 0:
+            continue
+        else:
+            answers[one_stud_in_course] = answers_val
 
 
     context={

@@ -39,7 +39,12 @@
             <nav >
 
               <ul class="pagination pagination-lg flex_logo">
+                  {%if count_task == 0%}
+                  <h3>Завдання ще не створені!</h3>
+                  {%else%}
                   <h3>Завдання:	&#160;</h3>
+                  {%endif%}
+
                   {% for task,task_num in tasks %}
                         <li class="page-item"><a class="page-link" href="{% url 'read_one_res'  task.test.slug course.course_slug task.pk %}?task={{task_num}}">{{task_num}}</a></li>
                   {%endfor%}

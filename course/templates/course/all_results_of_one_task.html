@@ -12,9 +12,11 @@
   <strong>Питання: </strong>{{task_text}}
 </div>
 {% if count_answer == 0 %}
-  <h1>Нема</h1>
+<div class="flex_logo mt-3 mb-3">
+  <h1>Учні ще не відповіли на це запитання!</h1>
+</div>
 {%endif%}
-{% for one_user,one_answer in answers.items%}
+{% for one_user,all_answers in answers.items%}
   <p class="text-muted">
     <img height="20" src="https://cdn.pixabay.com/photo/2016/03/19/04/40/cap-1266204_1280.png" alt="">
     {{one_user.first_name}} {{one_user.last_name}}
@@ -30,7 +32,7 @@
                               <th scope="col">Результат виконання коду учня</th>
                               <th scope="col">Результат перевірки</th>
                             </tr>
-
+{% for one_answer in all_answers%}
                                 <tr >
                                     <td>{{one_answer.data_on_which_they_checked.input_test_data}}</td>
                                     <td>{{one_answer.data_on_which_they_checked.input_test_data_type}}</td>
@@ -43,7 +45,7 @@
                                         <td>&#10060;</td>
                                     {%endif%}
                                 </tr>
-
+{%endfor%}
                 </table>
 
 {%endfor%}
