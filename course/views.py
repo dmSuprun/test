@@ -835,6 +835,7 @@ def get_async_comments(request, course_slug, test_slug, receiver):
 
     return HttpResponse(resp)
 
+
 @login_required
 def read_results_by_one_task(request,test_slug, course_slug, task_pk):
     this_req_test = get_object_or_404(TestsConfig,slug=test_slug)
@@ -855,12 +856,14 @@ def read_results_by_one_task(request,test_slug, course_slug, task_pk):
 
     ''' end collect all students e-mails and get sutends annswers'''
     answers={}
+    text_answ ={}
     for one_stud_in_course in students_list:
         answers_val = CheckinResult.objects.filter(answer__test_section=this_req_task_in_test, course=this_req_course,test=this_req_test, user=one_stud_in_course)
         if len(answers_val) == 0:
             continue
         else:
             answers[one_stud_in_course] = answers_val
+            text_answ[one_stud_in_course]=answers_val[0].answer.answer
 
 
     context={
@@ -872,6 +875,7 @@ def read_results_by_one_task(request,test_slug, course_slug, task_pk):
         'answers':answers,
         'count_answer':len(answers),
         'course':this_req_course,
-        'test':this_req_test
+        'test':this_req_test,
+        'text_answ':text_answ.items()
     }
     return render(request, 'course/all_results_of_one_task.html', context=context)
